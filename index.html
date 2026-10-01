@@ -2,63 +2,359 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Indian Medical Store | Veterinary</title>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
-header{background:#2874f0;color:white;padding:14px 18px;position:sticky;top:0;z-index:20}
-.header-row{display:flex;gap:12px;align-items:center;justify-content:space-between;max-width:1200px;margin:auto}
-.logo{font-size:22px;font-weight:bold}
-.tag{font-size:12px;opacity:.9}
-.search{width:100%;max-width:520px;border:0;border-radius:5px;padding:12px;font-size:15px}
-button{border:0;border-radius:5px;padding:11px 15px;font-weight:bold;cursor:pointer}
-.cart-btn{background:#ff9f00;color:#fff}
-.admin-btn{background:#fff;color:#2874f0}
-.container{max-width:1200px;margin:auto;padding:18px}
-.hero{background:white;border-radius:10px;padding:22px;margin-bottom:18px}
-.hero h1{margin:0 0 8px}
-.categories{display:flex;gap:8px;overflow:auto;padding-bottom:12px}
-.cat{background:white;border:1px solid #ddd;white-space:nowrap}
-.cat.active{background:#2874f0;color:white}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:15px}
-.card{background:white;border-radius:9px;padding:12px;box-shadow:0 2px 8px #00000012}
-.photo{height:175px;background:#f0f3f8;border-radius:7px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:65px}
-.photo img{width:100%;height:100%;object-fit:contain}
-.card h3{font-size:16px;margin:12px 0 7px}
-.price{font-size:20px;font-weight:bold}
-.old{text-decoration:line-through;color:#888;font-size:13px;margin-left:5px}
-.stock{font-size:12px;color:#16803c;margin:7px 0}
-.actions{display:flex;gap:7px;margin-top:10px}
-.actions button{flex:1;font-size:12px}
-.add{background:#ff9f00;color:white}
-.order{background:#fb641b;color:white}
-.panel{position:fixed;inset:0;background:#0008;z-index:50;display:none;overflow:auto}
-.panel.show{display:block}
-.box{background:white;max-width:700px;margin:25px auto;border-radius:10px;padding:20px;min-height:90vh}
-.close{float:right;background:#eee}
-.field{margin:12px 0}
-.field label{display:block;font-weight:bold;margin-bottom:5px}
-.field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px}
-textarea{min-height:90px;resize:vertical}
-.summary{background:#f6f7f9;padding:14px;border-radius:8px;margin:15px 0}
-.row{display:flex;justify-content:space-between;margin:8px 0}
-.total{font-size:21px;font-weight:bold;border-top:1px solid #ddd;padding-top:10px}
-.whatsapp{width:100%;background:#25d366;color:white;font-size:16px}
-.cart-item{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #eee;padding:12px 0}
-.qty button{padding:5px 9px}
-.empty{text-align:center;padding:40px;color:#777}
-.notice{padding:12px;background:#fff3cd;border-radius:7px;margin-bottom:15px}
-footer{padding:25px;text-align:center;color:#777}
-@media(max-width:700px){
- .header-row{flex-wrap:wrap}
- .search{order:3;max-width:none}
- .grid{grid-template-columns:repeat(2,1fr);gap:10px}
- .photo{height:135px}
- .card{padding:9px}
- .actions{flex-direction:column}
- .actions button{width:100%}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#f1f3f6;
+color:#17202a;
+}
+header{
+background:#2874f0;
+color:white;
+position:sticky;
+top:0;
+z-index:1000;
+box-shadow:0 2px 8px #0002;
+}
+.top{
+max-width:1200px;
+margin:auto;
+display:flex;
+align-items:center;
+gap:15px;
+padding:13px 15px;
+}
+.logo{
+font-size:21px;
+font-weight:800;
+white-space:nowrap;
+}
+.logo small{
+display:block;
+font-size:10px;
+font-weight:400;
+}
+.search{
+flex:1;
+display:flex;
+background:white;
+border-radius:3px;
+overflow:hidden;
+}
+.search input{
+width:100%;
+border:0;
+outline:0;
+padding:12px;
+font-size:15px;
+}
+.search button{
+border:0;
+background:white;
+padding:0 16px;
+font-size:18px;
+}
+.headbtn{
+background:transparent;
+border:0;
+color:white;
+font-weight:700;
+font-size:14px;
+cursor:pointer;
+}
+.cartBtn{
+background:white;
+color:#2874f0;
+border:0;
+border-radius:3px;
+padding:10px 13px;
+font-weight:bold;
+cursor:pointer;
+}
+.hero{
+background:white;
+padding:18px 15px;
+border-bottom:1px solid #ddd;
+}
+.heroInner{
+max-width:1200px;
+margin:auto;
+}
+.hero h1{
+font-size:25px;
+margin-bottom:5px;
+}
+.hero p{
+color:#666;
+}
+.categories{
+background:white;
+display:flex;
+gap:10px;
+overflow-x:auto;
+padding:12px 15px;
+border-bottom:1px solid #ddd;
+}
+.cat{
+white-space:nowrap;
+padding:9px 15px;
+border:1px solid #ddd;
+border-radius:20px;
+background:white;
+cursor:pointer;
+}
+.cat.active{
+background:#2874f0;
+color:white;
+border-color:#2874f0;
+}
+.container{
+max-width:1200px;
+margin:auto;
+padding:18px 15px 50px;
+}
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(205px,1fr));
+gap:14px;
+}
+.card{
+background:white;
+border-radius:4px;
+padding:12px;
+box-shadow:0 1px 4px #0002;
+transition:.15s;
+}
+.card:hover{
+box-shadow:0 4px 14px #0003;
+transform:translateY(-1px);
+}
+.pic{
+height:180px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#fafafa;
+border-radius:4px;
+overflow:hidden;
+margin-bottom:10px;
+}
+.pic img{
+width:100%;
+height:100%;
+object-fit:contain;
+}
+.emoji{
+font-size:65px;
+}
+.brand{
+font-size:12px;
+color:#777;
+margin-bottom:4px;
+}
+.name{
+font-size:16px;
+font-weight:700;
+min-height:38px;
+}
+.details{
+font-size:12px;
+color:#666;
+margin:6px 0;
+min-height:30px;
+}
+.price{
+font-size:19px;
+font-weight:800;
+}
+.mrp{
+font-size:12px;
+text-decoration:line-through;
+color:#888;
+margin-left:5px;
+font-weight:normal;
+}
+.stock{
+font-size:12px;
+color:#148a08;
+margin:5px 0;
+}
+.actions{
+display:flex;
+gap:7px;
+margin-top:10px;
+}
+.actions button{
+flex:1;
+padding:10px 5px;
+border-radius:3px;
+font-weight:700;
+cursor:pointer;
+}
+.add{
+border:1px solid #2874f0;
+background:white;
+color:#2874f0;
+}
+.order{
+border:1px solid #ff9f00;
+background:#ff9f00;
+color:white;
+}
+.empty{
+background:white;
+padding:40px;
+text-align:center;
+border-radius:5px;
+color:#777;
+}
+.overlay{
+display:none;
+position:fixed;
+inset:0;
+background:#0008;
+z-index:3000;
+align-items:center;
+justify-content:center;
+padding:12px;
+}
+.overlay.show{display:flex}
+.modal{
+background:white;
+width:min(700px,100%);
+max-height:94vh;
+overflow:auto;
+border-radius:8px;
+padding:20px;
+}
+.modal h2{
+margin-bottom:15px;
+}
+.close{
+float:right;
+border:0;
+background:#eee;
+border-radius:50%;
+width:32px;
+height:32px;
+cursor:pointer;
+font-size:18px;
+}
+.cartItem{
+display:flex;
+gap:12px;
+align-items:center;
+padding:12px 0;
+border-bottom:1px solid #ddd;
+}
+.cartInfo{
+flex:1;
+}
+.qty{
+display:flex;
+align-items:center;
+gap:8px;
+}
+.qty button{
+width:30px;
+height:30px;
+border:1px solid #ccc;
+background:white;
+cursor:pointer;
+}
+.total{
+font-size:20px;
+font-weight:bold;
+padding:15px 0;
+}
+.form{
+display:grid;
+gap:11px;
+}
+.form input,.form textarea,.form select{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:4px;
+font-size:14px;
+outline:none;
+}
+.form textarea{min-height:85px;resize:vertical}
+.primary{
+width:100%;
+padding:13px;
+border:0;
+border-radius:4px;
+background:#2874f0;
+color:white;
+font-weight:bold;
+font-size:15px;
+cursor:pointer;
+}
+.whatsapp{
+background:#25d366;
+}
+.delivery{
+background:#f8f9fa;
+border:1px solid #ddd;
+padding:12px;
+border-radius:5px;
+}
+.delivery strong{
+display:block;
+margin-bottom:5px;
+}
+.adminGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+.adminGrid .full{
+grid-column:1/-1;
+}
+.adminProduct{
+padding:10px 0;
+border-bottom:1px solid #ddd;
+display:flex;
+justify-content:space-between;
+gap:10px;
+align-items:center;
+}
+.danger{
+background:#e53935;
+color:white;
+border:0;
+padding:8px 12px;
+border-radius:4px;
+cursor:pointer;
+}
+.edit{
+background:#2874f0;
+color:white;
+border:0;
+padding:8px 12px;
+border-radius:4px;
+cursor:pointer;
+}
+footer{
+background:#17202a;
+color:white;
+text-align:center;
+padding:25px 15px;
+}
+@media(max-width:600px){
+.top{flex-wrap:wrap}
+.logo{width:100%}
+.search{order:3;width:100%;flex-basis:100%}
+.products{grid-template-columns:repeat(2,1fr);gap:8px}
+.pic{height:140px}
+.name{font-size:14px}
+.price{font-size:17px}
+.adminGrid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -66,180 +362,186 @@ footer{padding:25px;text-align:center;color:#777}
 <body>
 
 <header>
-<div class="header-row">
-<div>
-<div class="logo">INDIAN MEDICAL STORE</div>
-<div class="tag">Veterinary Medicines & Animal Healthcare</div>
+<div class="top">
+
+<div class="logo">
+INDIAN MEDICAL STORE
+<small>Veterinary Medicines & Animal Health Care</small>
 </div>
 
-<input id="search" class="search" placeholder="Search veterinary products..." oninput="renderProducts()">
-
-<div>
-<button class="cart-btn" onclick="openCart()">Cart (<span id="cartCount">0</span>)</button>
-<button class="admin-btn" onclick="openAdmin()">Admin</button>
+<div class="search">
+<input id="search" placeholder="Search veterinary products...">
+<button onclick="renderProducts()">🔍</button>
 </div>
+
+<button class="headbtn" onclick="openAdmin()">ADMIN</button>
+
+<button class="cartBtn" onclick="openCart()">
+🛒 Cart (<span id="cartCount">0</span>)
+</button>
+
 </div>
 </header>
 
-<main class="container">
-
 <section class="hero">
-<h1>Veterinary Products</h1>
-<p>Medicines, injections, supplements, dewormers, poultry and pet care products.</p>
-<div id="status" class="notice">Loading products...</div>
+<div class="heroInner">
+<h1>Veterinary Medicines & Animal Health Care</h1>
+<p>Order veterinary products online and receive your order on WhatsApp.</p>
+</div>
 </section>
 
-<div id="categories" class="categories"></div>
-<div id="products" class="grid"></div>
+<div class="categories" id="categories"></div>
 
+<main class="container">
+<div id="products" class="products">
+<div class="empty">Loading products...</div>
+</div>
 </main>
 
 <footer>
-INDIAN MEDICAL STORE<br>
-Veterinary Medicines & Animal Healthcare<br>
-WhatsApp Orders: +91 7310807043
+<p><b>INDIAN MEDICAL STORE</b></p>
+<p>Veterinary Medicines & Animal Health Care</p>
+<p>WhatsApp Orders: +91 7310807043</p>
 </footer>
 
 
 <!-- CART -->
-<div id="cartPanel" class="panel">
-<div class="box">
-<button class="close" onclick="closePanel('cartPanel')">✕ Close</button>
-<h2>Shopping Cart</h2>
+
+<div class="overlay" id="cartOverlay">
+<div class="modal">
+
+<button class="close" onclick="closeModal('cartOverlay')">×</button>
+
+<h2>Your Cart</h2>
+
 <div id="cartItems"></div>
-<div class="summary">
-<div class="row"><span>Subtotal</span><span id="cartSubtotal">₹0</span></div>
+
+<div class="total">
+Total: ₹<span id="cartTotal">0</span>
 </div>
-<button onclick="checkoutCart()" class="order" style="width:100%">PROCEED TO CHECKOUT</button>
+
+<button class="primary" onclick="openCheckout()">
+PROCEED TO CHECKOUT
+</button>
+
 </div>
 </div>
 
 
 <!-- CHECKOUT -->
-<div id="checkoutPanel" class="panel">
-<div class="box">
-<button class="close" onclick="closePanel('checkoutPanel')">✕ Close</button>
+
+<div class="overlay" id="checkoutOverlay">
+<div class="modal">
+
+<button class="close" onclick="closeModal('checkoutOverlay')">×</button>
+
 <h2>Checkout</h2>
 
-<div class="field">
-<label>Customer Name</label>
-<input id="customerName" placeholder="Enter your name">
+<div class="form">
+
+<input id="customerName" placeholder="Customer Name">
+
+<input id="customerPhone" placeholder="Mobile Number" type="tel">
+
+<textarea id="customerAddress" placeholder="Full Delivery Address"></textarea>
+
+<input id="landmark" placeholder="Landmark">
+
+<input id="distance" type="number" min="0" step="0.1"
+placeholder="Distance from store (KM)"
+oninput="calculateTotal()">
+
+<div class="delivery">
+<strong>Delivery Charges</strong>
+<span id="deliveryText">Enter distance to calculate delivery charge.</span>
 </div>
 
-<div class="field">
-<label>Mobile Number</label>
-<input id="customerPhone" type="tel" placeholder="Enter mobile number">
+<select id="payment">
+<option value="COD">Cash on Delivery</option>
+</select>
+
+<div>
+<b>Order Total: ₹<span id="checkoutTotal">0</span></b>
 </div>
 
-<div class="field">
-<label>Full Delivery Address</label>
-<textarea id="customerAddress" placeholder="Enter complete delivery address"></textarea>
+<button class="primary whatsapp" onclick="placeOrder()">
+📲 PLACE ORDER ON WHATSAPP
+</button>
+
 </div>
-
-<div class="field">
-<label>Landmark</label>
-<input id="customerLandmark" placeholder="Nearby landmark">
-</div>
-
-<div class="field">
-<label>Distance From Store (KM)</label>
-<input id="distance" type="number" min="0" step="0.1" value="0" oninput="updateCheckout()">
-</div>
-
-<div class="summary">
-<h3>Order Summary</h3>
-<div id="checkoutItems"></div>
-<div class="row"><span>Subtotal</span><span id="checkoutSubtotal">₹0</span></div>
-<div class="row"><span>Delivery Charge</span><span id="deliveryCharge">₹0</span></div>
-<div class="row total"><span>Total</span><span id="checkoutTotal">₹0</span></div>
-</div>
-
-<button class="whatsapp" onclick="placeOrder()">PLACE ORDER ON WHATSAPP</button>
-
 </div>
 </div>
 
 
 <!-- ADMIN -->
-<div id="adminPanel" class="panel">
-<div class="box">
-<button class="close" onclick="closePanel('adminPanel')">✕ Close</button>
+
+<div class="overlay" id="adminOverlay">
+<div class="modal">
+
+<button class="close" onclick="closeModal('adminOverlay')">×</button>
+
 <h2>Admin Panel</h2>
 
-<div class="notice">
-Admin product management requires authenticated Supabase access. 
-This customer page never exposes a service-role key.
-</div>
+<div id="adminLogin">
 
-<div class="field">
-<label>Admin Email</label>
-<input id="adminEmail" type="email" placeholder="Admin email">
-</div>
+<div class="form">
 
-<div class="field">
-<label>Admin Password</label>
+<input id="adminEmail" type="email" placeholder="Admin Email">
+
 <input id="adminPassword" type="password" placeholder="Password">
+
+<button class="primary" onclick="adminLogin()">
+LOGIN
+</button>
+
 </div>
 
-<button onclick="adminLogin()" style="background:#2874f0;color:white;width:100%">ADMIN LOGIN</button>
-
-<div id="adminArea" style="display:none;margin-top:20px">
-
-<h3>Add Product</h3>
-
-<div class="field">
-<label>Product Name</label>
-<input id="pName" placeholder="Product name">
 </div>
 
-<div class="field">
-<label>Brand</label>
-<input id="pBrand" placeholder="Company / Brand">
-</div>
 
-<div class="field">
-<label>Composition</label>
+<div id="adminPanel" style="display:none">
+
+<h3 style="margin:15px 0">Add / Edit Product</h3>
+
+<div class="adminGrid">
+
+<input id="pName" placeholder="Product Name">
+
+<input id="pBrand" placeholder="Brand / Company">
+
 <input id="pComposition" placeholder="Composition">
-</div>
 
-<div class="field">
-<label>Details</label>
-<textarea id="pDetails" placeholder="Product details"></textarea>
-</div>
+<input id="pCategory" placeholder="Category">
 
-<div class="field">
-<label>Category</label>
-<input id="pCategory" placeholder="Injections / Tablets / Powders etc.">
-</div>
+<input id="pPrice" type="number" placeholder="Selling Price">
 
-<div class="field">
-<label>Selling Price</label>
-<input id="pPrice" type="number" placeholder="Selling price">
-</div>
-
-<div class="field">
-<label>MRP</label>
 <input id="pMrp" type="number" placeholder="MRP">
-</div>
 
-<div class="field">
-<label>Stock</label>
-<input id="pStock" type="number" value="0">
-</div>
+<input id="pStock" type="number" placeholder="Stock">
 
-<div class="field">
-<label>Product Image URL</label>
 <input id="pImage" placeholder="Image URL">
+
+<textarea id="pDetails" class="full"
+placeholder="Product Details"></textarea>
+
 </div>
 
-<button onclick="addProduct()" style="background:#16803c;color:white;width:100%">ADD PRODUCT</button>
+<button class="primary" style="margin-top:10px" onclick="saveProduct()">
+SAVE PRODUCT
+</button>
 
-<hr style="margin:25px 0">
+<button class="primary"
+style="margin-top:10px;background:#555"
+onclick="adminLogout()">
+LOGOUT
+</button>
 
-<h3>Your Products</h3>
+<h3 style="margin:20px 0 10px">Products</h3>
+
 <div id="adminProducts"></div>
 
 </div>
+
 </div>
 </div>
 
@@ -247,515 +549,780 @@ This customer page never exposes a service-role key.
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* SUPABASE */
-const SUPABASE_URL = "https://aynknzitmmadeuvzlmxo.supabase.co";
-const SUPABASE_KEY = "sb_publishable_Xjd5t8L2Wx8Yj8Oax04fBA_TC5J1itC";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+const SUPABASE_URL =
+"https://aynknzitmmadeuvzlmxo.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_Xjd5t8L2Wx8Yj8Oax04fBA_TC5J1itC";
+
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
-let products = [];
-let cart = [];
-let selectedCategory = "All";
-let checkoutItems = [];
+const WHATSAPP =
+"917310807043";
 
 
-/* LOAD PRODUCTS */
+let products=[];
+let cart=[];
+let editingId=null;
+let selectedCategory="All";
+
+
+const fallbackProducts=[
+
+{
+id:"sample1",
+name:"Nilzan Oral Suspension",
+brand:"Virbac",
+composition:"Oxyclozanide",
+details:"Veterinary oral suspension",
+category:"Liquid",
+selling_price:450,
+mrp:500,
+stock:20,
+image_url:""
+},
+
+{
+id:"sample2",
+name:"Calcium Supplement",
+brand:"Veterinary",
+composition:"Calcium + Vitamin D3",
+details:"Calcium supplement for animals",
+category:"Liquid",
+selling_price:280,
+mrp:320,
+stock:30,
+image_url:""
+},
+
+{
+id:"sample3",
+name:"Deworming Suspension",
+brand:"Veterinary",
+composition:"Veterinary Dewormer",
+details:"For livestock deworming",
+category:"Liquid",
+selling_price:350,
+mrp:400,
+stock:25,
+image_url:""
+},
+
+{
+id:"sample4",
+name:"Multivitamin Injection",
+brand:"Veterinary",
+composition:"Multivitamin",
+details:"Veterinary injectable supplement",
+category:"Injection",
+selling_price:180,
+mrp:210,
+stock:20,
+image_url:""
+},
+
+{
+id:"sample5",
+name:"Mineral Mixture",
+brand:"Veterinary",
+composition:"Minerals + Vitamins",
+details:"Animal mineral supplement",
+category:"Powder",
+selling_price:220,
+mrp:250,
+stock:40,
+image_url:""
+},
+
+{
+id:"sample6",
+name:"Animal Antibiotic Injection",
+brand:"Veterinary",
+composition:"Veterinary Antibiotic",
+details:"Use only under veterinary advice",
+category:"Injection",
+selling_price:250,
+mrp:290,
+stock:15,
+image_url:""
+},
+
+{
+id:"sample7",
+name:"Pet Vitamin Tablets",
+brand:"Veterinary",
+composition:"Multivitamins",
+details:"Vitamin supplement for pets",
+category:"Tablet",
+selling_price:150,
+mrp:180,
+stock:50,
+image_url:""
+},
+
+{
+id:"sample8",
+name:"Wound Care Spray",
+brand:"Veterinary",
+composition:"Animal Wound Care",
+details:"External veterinary wound care",
+category:"Other",
+selling_price:190,
+mrp:220,
+stock:30,
+image_url:""
+}
+
+];
+
+
 async function loadProducts(){
 
-  const status = document.getElementById("status");
+const {data,error}=await supabaseClient
+.from("products")
+.select("*")
+.eq("is_active",true)
+.order("created_at",{ascending:false});
 
-  const {data,error} = await supabaseClient
-    .from("products")
-    .select("*")
-    .eq("is_active",true)
-    .order("created_at",{ascending:false});
+if(error || !data || data.length===0){
 
-  if(error){
-    console.error(error);
-    status.innerText =
-      "Online database is connected, but products could not be loaded. Sample products are shown.";
-    loadSampleProducts();
-    return;
-  }
+products=fallbackProducts;
 
-  products = data || [];
+}else{
 
-  if(products.length === 0){
-    status.innerText =
-      "No products have been added to the online catalogue yet.";
-  }else{
-    status.style.display="none";
-  }
+products=data;
 
-  createCategories();
-  renderProducts();
+}
+
+buildCategories();
+renderProducts();
+
 }
 
 
-/* SAMPLE FALLBACK */
-function loadSampleProducts(){
+function buildCategories(){
 
- products=[
-  {id:"sample1",name:"Veterinary Injection",category:"Injections",selling_price:150,mrp:170,stock:10,image_url:"",brand:"Veterinary"},
-  {id:"sample2",name:"Animal Deworming Tablet",category:"Tablets",selling_price:120,mrp:140,stock:10,image_url:"",brand:"Veterinary"},
-  {id:"sample3",name:"Animal Calcium Supplement",category:"Supplements",selling_price:250,mrp:280,stock:10,image_url:"",brand:"Veterinary"},
-  {id:"sample4",name:"Animal Vitamin Liquid",category:"Liquids",selling_price:180,mrp:210,stock:10,image_url:"",brand:"Veterinary"},
-  {id:"sample5",name:"Veterinary Powder",category:"Powders",selling_price:100,mrp:120,stock:10,image_url:"",brand:"Veterinary"},
-  {id:"sample6",name:"Poultry Health Product",category:"Poultry",selling_price:160,mrp:180,stock:10,image_url:"",brand:"Veterinary"},
-  {id:"sample7",name:"Pet Care Product",category:"Pet Care",selling_price:200,mrp:230,stock:10,image_url:"",brand:"Veterinary"},
-  {id:"sample8",name:"Animal Health Product",category:"Animal Care",selling_price:220,mrp:250,stock:10,image_url:"",brand:"Veterinary"}
- ];
+let cats=["All",...new Set(
+products.map(p=>p.category).filter(Boolean)
+)];
 
- createCategories();
- renderProducts();
+document.getElementById("categories").innerHTML=
+cats.map(c=>`
+<button class="cat ${c===selectedCategory?"active":""}"
+onclick="selectCategory('${escapeAttr(c)}')">
+${escapeHtml(c)}
+</button>
+`).join("");
+
 }
 
-
-/* CATEGORIES */
-function createCategories(){
-
- const categories=["All",...new Set(products.map(p=>p.category).filter(Boolean))];
-
- document.getElementById("categories").innerHTML=
- categories.map(c=>
- `<button class="cat ${c===selectedCategory?'active':''}" onclick="selectCategory('${escapeHtml(c)}')">${escapeHtml(c)}</button>`
- ).join("");
-}
 
 function selectCategory(c){
- selectedCategory=c;
- createCategories();
- renderProducts();
+
+selectedCategory=c;
+buildCategories();
+renderProducts();
+
 }
 
 
-/* PRODUCTS */
 function renderProducts(){
 
- const q=document.getElementById("search").value.toLowerCase().trim();
+const search=
+document.getElementById("search").value
+.toLowerCase().trim();
 
- const list=products.filter(p=>{
-   const text=[
-     p.name,p.brand,p.composition,p.category,p.details
-   ].join(" ").toLowerCase();
+let list=products.filter(p=>{
 
-   return (selectedCategory==="All" || p.category===selectedCategory)
-     && text.includes(q);
- });
+let matchSearch=
+(p.name||"").toLowerCase().includes(search) ||
+(p.brand||"").toLowerCase().includes(search) ||
+(p.composition||"").toLowerCase().includes(search);
 
- const area=document.getElementById("products");
+let matchCat=
+selectedCategory==="All" ||
+p.category===selectedCategory;
 
- if(!list.length){
-   area.innerHTML='<div class="empty">No products found.</div>';
-   return;
- }
+return matchSearch && matchCat;
 
- area.innerHTML=list.map(p=>{
+});
 
-   const price=Number(p.selling_price||0);
-   const mrp=Number(p.mrp||0);
+const box=document.getElementById("products");
 
-   const image=p.image_url
-     ? `<img src="${escapeAttr(p.image_url)}" alt="${escapeAttr(p.name)}">`
-     : `<span>${categoryEmoji(p.category)}</span>`;
+if(list.length===0){
 
-   return `
-   <div class="card">
-     <div class="photo">${image}</div>
+box.innerHTML=
+`<div class="empty">No products found.</div>`;
 
-     <h3>${escapeHtml(p.name||"Product")}</h3>
+return;
 
-     <div>
-       <span class="price">₹${price.toFixed(0)}</span>
-       ${mrp>price?`<span class="old">₹${mrp.toFixed(0)}</span>`:""}
-     </div>
+}
 
-     <div class="stock">
-       ${Number(p.stock||0)>0 ? "In Stock" : "Out of Stock"}
-     </div>
+box.innerHTML=list.map(p=>{
 
-     <div class="actions">
-       <button class="add" onclick="addToCart('${p.id}')" ${Number(p.stock||0)<=0?"disabled":""}>
-         ADD TO CART
-       </button>
+const price=Number(p.selling_price||0);
+const mrp=Number(p.mrp||0);
 
-       <button class="order" onclick="orderNow('${p.id}')" ${Number(p.stock||0)<=0?"disabled":""}>
-         ORDER NOW
-       </button>
-     </div>
-   </div>`;
- }).join("");
+return `
+
+<div class="card">
+
+<div class="pic">
+
+${
+p.image_url
+?
+`<img src="${escapeAttr(p.image_url)}"
+onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+<span class="emoji" style="display:none">💊</span>`
+:
+`<span class="emoji">💊</span>`
+}
+
+</div>
+
+<div class="brand">${escapeHtml(p.brand||"Veterinary")}</div>
+
+<div class="name">${escapeHtml(p.name||"Product")}</div>
+
+<div class="details">
+${escapeHtml(p.composition||p.details||"Veterinary product")}
+</div>
+
+<div class="price">
+₹${price}
+${mrp>price?`<span class="mrp">₹${mrp}</span>`:""}
+</div>
+
+<div class="stock">
+${Number(p.stock||0)>0?"In Stock":"Out of Stock"}
+</div>
+
+<div class="actions">
+
+<button class="add"
+${Number(p.stock||0)<=0?"disabled":""}
+onclick="addToCart('${p.id}')">
+ADD TO CART
+</button>
+
+<button class="order"
+${Number(p.stock||0)<=0?"disabled":""}
+onclick="orderNow('${p.id}')">
+ORDER NOW
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
 }
 
 
-/* CART */
 function addToCart(id){
 
- const p=products.find(x=>x.id===id);
- if(!p)return;
+const p=products.find(x=>x.id===id);
 
- const existing=cart.find(x=>x.id===id);
+if(!p)return;
 
- if(existing){
-   existing.qty++;
- }else{
-   cart.push({...p,qty:1});
- }
-
- updateCartCount();
- alert("Product added to cart.");
+if(Number(p.stock||0)<=0){
+alert("This product is currently out of stock.");
+return;
 }
 
-function changeQty(id,change){
+const existing=cart.find(x=>x.id===id);
 
- const item=cart.find(x=>x.id===id);
- if(!item)return;
+if(existing){
 
- item.qty+=change;
-
- if(item.qty<=0){
-   cart=cart.filter(x=>x.id!==id);
- }
-
- updateCartCount();
- renderCart();
+if(existing.qty<Number(p.stock)){
+existing.qty++;
 }
 
-function updateCartCount(){
- document.getElementById("cartCount").innerText=
- cart.reduce((sum,x)=>sum+x.qty,0);
+}else{
+
+cart.push({
+...p,
+qty:1
+});
+
 }
 
-function openCart(){
- renderCart();
- document.getElementById("cartPanel").classList.add("show");
+updateCart();
+alert("Product added to cart.");
+
 }
+
+
+function orderNow(id){
+
+addToCartSilent(id);
+openCheckout();
+
+}
+
+
+function addToCartSilent(id){
+
+const p=products.find(x=>x.id===id);
+
+if(!p)return;
+
+if(Number(p.stock||0)<=0){
+alert("This product is currently out of stock.");
+return;
+}
+
+const existing=cart.find(x=>x.id===id);
+
+if(existing){
+
+if(existing.qty<Number(p.stock)){
+existing.qty++;
+}
+
+}else{
+
+cart.push({...p,qty:1});
+
+}
+
+updateCart();
+
+}
+
+
+function updateCart(){
+
+document.getElementById("cartCount").innerText=
+cart.reduce((sum,x)=>sum+x.qty,0);
+
+renderCart();
+calculateTotal();
+
+}
+
 
 function renderCart(){
 
- const area=document.getElementById("cartItems");
+const box=document.getElementById("cartItems");
 
- if(!cart.length){
-   area.innerHTML='<div class="empty">Your cart is empty.</div>';
-   document.getElementById("cartSubtotal").innerText="₹0";
-   return;
- }
+if(cart.length===0){
 
- let subtotal=0;
+box.innerHTML=
+`<div class="empty">Your cart is empty.</div>`;
 
- area.innerHTML=cart.map(item=>{
+document.getElementById("cartTotal").innerText="0";
+return;
 
-   const line=Number(item.selling_price||0)*item.qty;
-   subtotal+=line;
+}
 
-   return `
-   <div class="cart-item">
-     <div>
-       <b>${escapeHtml(item.name)}</b><br>
-       ₹${Number(item.selling_price||0).toFixed(0)}
-     </div>
+box.innerHTML=cart.map((p,i)=>`
 
-     <div class="qty">
-       <button onclick="changeQty('${item.id}',-1)">−</button>
-       ${item.qty}
-       <button onclick="changeQty('${item.id}',1)">+</button>
-     </div>
+<div class="cartItem">
 
-     <b>₹${line.toFixed(0)}</b>
-   </div>`;
- }).join("");
+<div class="cartInfo">
 
- document.getElementById("cartSubtotal").innerText="₹"+subtotal.toFixed(0);
+<b>${escapeHtml(p.name)}</b>
+
+<div>₹${Number(p.selling_price||0)} × ${p.qty}</div>
+
+</div>
+
+<div class="qty">
+
+<button onclick="changeQty(${i},-1)">−</button>
+
+<b>${p.qty}</b>
+
+<button onclick="changeQty(${i},1)">+</button>
+
+</div>
+
+<button class="danger"
+onclick="removeCart(${i})">
+×
+</button>
+
+</div>
+
+`).join("");
+
+document.getElementById("cartTotal").innerText=
+cart.reduce(
+(sum,p)=>sum+(Number(p.selling_price||0)*p.qty),
+0
+);
+
 }
 
 
-/* ORDER NOW */
-function orderNow(id){
+function changeQty(i,n){
 
- const p=products.find(x=>x.id===id);
- if(!p)return;
+const item=cart[i];
 
- checkoutItems=[{...p,qty:1}];
+if(!item)return;
 
- closePanel("cartPanel");
- renderCheckout();
+item.qty+=n;
 
- document.getElementById("checkoutPanel").classList.add("show");
+if(item.qty<=0){
+cart.splice(i,1);
+}
+
+if(item.qty>Number(item.stock||999999)){
+item.qty=Number(item.stock);
+}
+
+updateCart();
+
 }
 
 
-/* CART CHECKOUT */
-function checkoutCart(){
+function removeCart(i){
 
- if(!cart.length){
-   alert("Your cart is empty.");
-   return;
- }
+cart.splice(i,1);
+updateCart();
 
- checkoutItems=cart.map(x=>({...x}));
-
- closePanel("cartPanel");
- renderCheckout();
-
- document.getElementById("checkoutPanel").classList.add("show");
 }
 
 
-/* CHECKOUT */
-function renderCheckout(){
+function openCart(){
 
- const area=document.getElementById("checkoutItems");
+document.getElementById("cartOverlay")
+.classList.add("show");
 
- area.innerHTML=checkoutItems.map(item=>
-   `<div class="row">
-     <span>${escapeHtml(item.name)} × ${item.qty}</span>
-     <span>₹${(Number(item.selling_price||0)*item.qty).toFixed(0)}</span>
-   </div>`
- ).join("");
+renderCart();
 
- updateCheckout();
-}
-
-function getSubtotal(){
-
- return checkoutItems.reduce(
-   (sum,item)=>sum+(Number(item.selling_price||0)*item.qty),0
- );
-}
-
-function getDeliveryCharge(distance){
-
- distance=Number(distance||0);
-
- if(distance<=5)return 0;
- if(distance<=10)return 30;
- return 50;
-}
-
-function updateCheckout(){
-
- const subtotal=getSubtotal();
-
- const distance=Number(document.getElementById("distance").value||0);
-
- const delivery=getDeliveryCharge(distance);
-
- document.getElementById("checkoutSubtotal").innerText=
-   "₹"+subtotal.toFixed(0);
-
- document.getElementById("deliveryCharge").innerText=
-   "₹"+delivery.toFixed(0);
-
- document.getElementById("checkoutTotal").innerText=
-   "₹"+(subtotal+delivery).toFixed(0);
 }
 
 
-/* PLACE WHATSAPP ORDER */
+function openCheckout(){
+
+if(cart.length===0){
+
+alert("Please add a product first.");
+return;
+
+}
+
+closeModal("cartOverlay");
+
+document.getElementById("checkoutOverlay")
+.classList.add("show");
+
+calculateTotal();
+
+}
+
+
+function calculateTotal(){
+
+const subtotal=cart.reduce(
+(sum,p)=>sum+(Number(p.selling_price||0)*p.qty),
+0
+);
+
+let distance=
+parseFloat(document.getElementById("distance")?.value||"");
+
+let fee=0;
+let text="";
+
+if(!isNaN(distance)){
+
+if(distance<=5){
+
+fee=0;
+text="Delivery: FREE";
+
+}else if(distance<=10){
+
+fee=30;
+text="Delivery charge: ₹30";
+
+}else{
+
+fee=50;
+text="Delivery charge: ₹50";
+
+}
+
+}else{
+
+text="Enter distance from store to calculate delivery charge.";
+
+}
+
+document.getElementById("deliveryText").innerText=text;
+
+document.getElementById("checkoutTotal").innerText=
+subtotal+fee;
+
+}
+
+
 async function placeOrder(){
 
- const name=document.getElementById("customerName").value.trim();
- const phone=document.getElementById("customerPhone").value.trim();
- const address=document.getElementById("customerAddress").value.trim();
- const landmark=document.getElementById("customerLandmark").value.trim();
- const distance=Number(document.getElementById("distance").value||0);
+if(cart.length===0){
+alert("Cart is empty.");
+return;
+}
 
- if(!name || !phone || !address){
-   alert("Please enter your name, mobile number and full delivery address.");
-   return;
- }
+const name=
+document.getElementById("customerName").value.trim();
 
- if(!checkoutItems.length){
-   alert("No products selected.");
-   return;
- }
+const phone=
+document.getElementById("customerPhone").value.trim();
 
- const subtotal=getSubtotal();
- const delivery=getDeliveryCharge(distance);
- const total=subtotal+delivery;
+const address=
+document.getElementById("customerAddress").value.trim();
 
- /* SAVE ORDER */
- let orderId=null;
+const landmark=
+document.getElementById("landmark").value.trim();
 
- try{
+const distance=
+parseFloat(document.getElementById("distance").value||"");
 
-   const {data,error}=await supabaseClient
-     .from("orders")
-     .insert({
-       customer_name:name,
-       phone:phone,
-       address:address,
-       landmark:landmark,
-       payment_method:"COD",
-       status:"pending",
-       total:total,
-       whatsapp_order:true
-     })
-     .select("id")
-     .single();
+if(!name||!phone||!address){
 
-   if(!error && data){
-     orderId=data.id;
+alert("Please fill Customer Name, Mobile Number and Address.");
+return;
 
-     const items=checkoutItems.map(item=>({
-       order_id:orderId,
-       product_id:item.id.startsWith("sample")?null:item.id,
-       product_name:item.name,
-       quantity:item.qty,
-       unit_price:Number(item.selling_price||0)
-     }));
+}
 
-     await supabaseClient.from("order_items").insert(items);
-   }
+if(isNaN(distance)){
 
- }catch(err){
-   console.error(err);
- }
+alert("Please enter delivery distance in KM.");
+return;
 
+}
 
- /* WHATSAPP MESSAGE */
- let message=
- `INDIAN MEDICAL STORE - NEW ORDER%0A%0A`+
- `Customer Name: ${name}%0A`+
- `Mobile: ${phone}%0A`+
- `Address: ${address}%0A`+
- `Landmark: ${landmark||"Not provided"}%0A`+
- `Distance: ${distance} KM%0A%0A`+
- `ORDER ITEMS:%0A`;
+let deliveryFee=0;
 
- checkoutItems.forEach(item=>{
-   message+=
-   `- ${item.name} x ${item.qty} = ₹${(Number(item.selling_price||0)*item.qty).toFixed(0)}%0A`;
- });
+if(distance<=5) deliveryFee=0;
+else if(distance<=10) deliveryFee=30;
+else deliveryFee=50;
 
- message+=
- `%0ASubtotal: ₹${subtotal.toFixed(0)}%0A`+
- `Delivery Charge: ₹${delivery.toFixed(0)}%0A`+
- `TOTAL: ₹${total.toFixed(0)}%0A`+
- `Payment: Cash on Delivery`;
+const subtotal=cart.reduce(
+(sum,p)=>sum+(Number(p.selling_price||0)*p.qty),
+0
+);
 
- if(orderId){
-   message+=`%0AOrder ID: ${orderId}`;
- }
+const total=subtotal+deliveryFee;
 
- const url="https://wa.me/917310807043?text="+message;
+const orderText=cart.map(p=>
+`• ${p.name} × ${p.qty} = ₹${Number(p.selling_price||0)*p.qty}`
+).join("\n");
 
- window.open(url,"_blank");
+const message=
+`*INDIAN MEDICAL STORE - NEW ORDER*
 
- cart=[];
- updateCartCount();
+Customer: ${name}
+Mobile: ${phone}
+
+Address:
+${address}
+
+Landmark: ${landmark||"N/A"}
+
+Distance: ${distance} KM
+Delivery: ₹${deliveryFee}
+
+Payment: Cash on Delivery
+
+*Products:*
+${orderText}
+
+Subtotal: ₹${subtotal}
+Delivery: ₹${deliveryFee}
+
+*TOTAL: ₹${total}*
+
+Thank you.`;
+
+try{
+
+await supabaseClient
+.from("orders")
+.insert({
+customer_name:name,
+phone:phone,
+address:address,
+landmark:landmark,
+payment_method:"COD",
+total:total,
+whatsapp_order:true
+});
+
+}catch(e){
+
+console.log("Database order save skipped:",e);
+
+}
+
+window.open(
+"https://wa.me/"+WHATSAPP+
+"?text="+encodeURIComponent(message),
+"_blank"
+);
+
+alert("Order details are ready on WhatsApp.");
+
+cart=[];
+updateCart();
+closeModal("checkoutOverlay");
 
 }
 
 
-/* ADMIN */
-function openAdmin(){
- document.getElementById("adminPanel").classList.add("show");
+async function openAdmin(){
+
+document.getElementById("adminOverlay")
+.classList.add("show");
+
+const {data}=await supabaseClient.auth.getSession();
+
+if(data && data.session){
+
+showAdminPanel();
+
+}else{
+
+document.getElementById("adminLogin").style.display="block";
+document.getElementById("adminPanel").style.display="none";
+
 }
+
+}
+
 
 async function adminLogin(){
 
- const email=document.getElementById("adminEmail").value.trim();
- const password=document.getElementById("adminPassword").value;
+const email=
+document.getElementById("adminEmail").value.trim();
 
- if(!email || !password){
-   alert("Enter admin email and password.");
-   return;
- }
+const password=
+document.getElementById("adminPassword").value;
 
- const {error}=await supabaseClient.auth.signInWithPassword({
-   email,
-   password
- });
+if(!email||!password){
 
- if(error){
-   alert("Admin login failed: "+error.message);
-   return;
- }
+alert("Enter email and password.");
+return;
 
- document.getElementById("adminArea").style.display="block";
+}
 
- loadAdminProducts();
+const {data,error}=
+await supabaseClient.auth.signInWithPassword({
+email,
+password
+});
 
- alert("Admin login successful.");
+if(error){
+
+alert("Login failed: "+error.message);
+return;
+
+}
+
+showAdminPanel();
+
 }
 
 
-/* ADMIN PRODUCTS */
-async function loadAdminProducts(){
+function showAdminPanel(){
 
- const area=document.getElementById("adminProducts");
+document.getElementById("adminLogin").style.display="none";
+document.getElementById("adminPanel").style.display="block";
 
- const {data,error}=await supabaseClient
-   .from("products")
-   .select("*")
-   .order("created_at",{ascending:false});
+renderAdminProducts();
 
- if(error){
-   area.innerHTML="<p>Products could not be loaded.</p>";
-   return;
- }
-
- area.innerHTML=data.map(p=>`
-   <div style="border:1px solid #ddd;padding:12px;margin:8px 0;border-radius:7px">
-     <b>${escapeHtml(p.name)}</b><br>
-     ₹${Number(p.selling_price||0)}
-     <button onclick="deleteProduct('${p.id}')" style="float:right;background:#d33;color:white">
-       DELETE
-     </button>
-   </div>
- `).join("");
 }
 
 
-/* ADD PRODUCT */
-async function addProduct(){
+async function adminLogout(){
 
- const product={
-   name:document.getElementById("pName").value.trim(),
-   brand:document.getElementById("pBrand").value.trim(),
-   composition:document.getElementById("pComposition").value.trim(),
-   details:document.getElementById("pDetails").value.trim(),
-   category:document.getElementById("pCategory").value.trim(),
-   selling_price:Number(document.getElementById("pPrice").value||0),
-   mrp:Number(document.getElementById("pMrp").value||0),
-   stock:Number(document.getElementById("pStock").value||0),
-   image_url:document.getElementById("pImage").value.trim(),
-   is_active:true
- };
+await supabaseClient.auth.signOut();
 
- if(!product.name || !product.category){
-   alert("Product name and category are required.");
-   return;
- }
+document.getElementById("adminLogin").style.display="block";
+document.getElementById("adminPanel").style.display="none";
 
- const {error}=await supabaseClient
-   .from("products")
-   .insert(product);
-
- if(error){
-   alert("Product could not be added: "+error.message);
-   return;
- }
-
- alert("Product added successfully.");
-
- document.getElementById("pName").value="";
- document.getElementById("pBrand").value="";
- document.getElementById("pComposition").value="";
- document.getElementById("pDetails").value="";
- document.getElementById("pCategory").value="";
- document.getElementById("pPrice").value="";
- document.getElementById("pMrp").value="";
- document.getElementById("pStock").value="0";
- document.getElementById("pImage").value="";
-
- loadProducts();
- loadAdminProducts();
 }
 
 
-/* DELE
+async function saveProduct(){
+
+const name=
+document.getElementById("pName").value.trim();
+
+const brand=
+document.getElementById("pBrand").value.trim();
+
+const composition=
+document.getElementById("pComposition").value.trim();
+
+const category=
+document.getElementById("pCategory").value.trim()||"Other";
+
+const selling_price=
+Number(document.getElementById("pPrice").value||0);
+
+const mrp=
+Number(document.getElementById("pMrp").value||0);
+
+const stock=
+Number(document.getElementById("pStock").value||0);
+
+const image_url=
+document.getElementById("pImage").value.trim();
+
+const details=
+document.getElementById("pDetails").value.trim();
+
+if(!name){
+
+alert("Product name is required.");
+return;
+
+}
+
+const payload={
+name,
+brand,
+composition,
+category,
+selling_price,
+mrp,
+stock,
+image_url,
+details,
+is_active:true
+};
+
+let result;
+
+if(editingId){
+
+result=await supabaseClient
+.from("products")
+.update(payload)
+.eq("id",editingId);
+
+}else{
+
+result=await supabaseClient
+.from("products")
+.insert(payload);
+
+}
+
+if(result.error){
+
+alert("Could not save produ

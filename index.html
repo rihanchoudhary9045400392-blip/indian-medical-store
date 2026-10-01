@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Medical Store | Veterinary</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f1f3f6;color:#222}
+header{background:#123b32;color:white;padding:18px;text-align:center}
+header h1{margin:0;font-size:25px}
+header p{margin:7px 0 0}
+.search{padding:12px;background:white;position:sticky;top:0}
+input,select,button{padding:12px;border:1px solid #ccc;border-radius:7px;font-size:15px}
+.search input{width:100%}
+.categories{display:flex;gap:8px;overflow:auto;padding:12px}
+.categories button{white-space:nowrap;background:white}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:12px}
+.product{background:white;border-radius:12px;padding:12px;box-shadow:0 2px 7px #ddd}
+.photo{height:110px;background:#e7f1ed;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:48px}
+.product h3{font-size:16px;margin:10px 0}
+.price{font-weight:bold;color:#147b43}
+.product button{background:#176b4b;color:white;border:0;width:100%;margin-top:8px}
+.cart{background:white;margin:12px;padding:15px;border-radius:12px}
+.cart h2{margin-top:0}
+.cartitem{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #eee;padding:8px 0}
+.cartitem button{padding:5px 10px}
+.checkout input{width:100%;margin:6px 0}
+.order{width:100%;background:#16864b;color:white;border:0;margin-top:12px}
+footer{text-align:center;background:#123b32;color:white;padding:18px;margin-top:20px}
+@media(min-width:650px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>INDIAN MEDICAL STORE</h1>
+<p>Veterinary Medicines & Animal Healthcare</p>
+<p>Animal Care • Veterinary Products • Online Orders</p>
+</header>
+
+<div class="search">
+<input id="search" placeholder="Product खोजें..." oninput="render()">
+</div>
+
+<div class="categories" id="categories"></div>
+
+<div class="products" id="products"></div>
+
+<section class="cart">
+<h2>🛒 आपका Cart</h2>
+<div id="cart"></div>
+<h3 id="total">कुल: ₹0</h3>
+
+<div class="checkout">
+<h3>Delivery Details</h3>
+<input id="customer" placeholder="ग्राहक का नाम">
+<input id="phone" placeholder="मोबाइल नंबर" type="tel">
+<input id="address" placeholder="पूरा पता / गाँव">
+<input id="distance" type="number" min="0" step="0.1" placeholder="दुकान से दूरी KM में">
+<p id="delivery">Delivery Charge: ₹0</p>
+<button class="order" onclick="placeOrder()">WhatsApp पर Order करें</button>
+</div>
+</section>
+
+<footer>
+<strong>INDIAN MEDICAL STORE</strong>
+<p>Veterinary Medicines & Animal Healthcare</p>
+<p>Order: 7310807043</p>
+</footer>
+
+<script>
+const productsData = [
+{id:1,name:"Veterinary Injection",category:"Injections",price:150,icon:"💉"},
+{id:2,name:"Deworming Product",category:"Tablets",price:120,icon:"💊"},
+{id:3,name:"Animal Calcium Supplement",category:"Supplements",price:250,icon:"🧴"},
+{id:4,name:"Vitamin Supplement",category:"Liquids",price:180,icon:"🧪"},
+{id:5,name:"Veterinary Powder",category:"Powders",price:100,icon:"📦"},
+{id:6,name:"Animal Health Supplement",category:"Supplements",price:220,icon:"🐄"},
+{id:7,name:"Poultry Health Product",category:"Poultry",price:160,icon:"🐔"},
+{id:8,name:"Pet Care Product",category:"Pet Care",price:200,icon:"🐕"}
+];
+
+let cartItems = {};
+let activeCategory = "All";
+
+function renderCategories(){
+const cats=["All",...new Set(productsData.map(p=>p.category))];
+document.getElementById("categories").innerHTML=cats.map(c=>
+`<button onclick="activeCategory='${c}';render()">${c}</button>`
+).join("");
+}
+
+function render(){
+const q=document.getElementById("search").value.toLowerCase();
+const list=productsData.filter(p=>
+(activeCategory==="All"||p.category===activeCategory)&&
+p.name.toLowerCase().includes(q)
+);
+document.getElementById("products").innerHTML=list.map(p=>`
+<div class="product">
+<div class="photo">${p.icon}</div>
+<h3>${p.name}</h3>
+<p>${p.category}</p>
+<p class="price">₹${p.price}</p>
+<button onclick="add(${p.id})">Add to Cart</button>
+</div>`).join("");
+showCart();
+}
+
+function add(id){
+cartItems[id]=(cartItems[id]||0)+1;
+showCart();
+}
+
+function changeQty(id,delta){
+cartItems[id]=(cartItems[id]||0)+delta;
+if(cartItems[id]<=0)delete cartItems[id];
+showCart();
+}
+
+function deliveryFee(){
+const km=Number(document.getElementById("distance").value||0);
+if(km<=5)return 0;
+if(km<=10)return 30;
+return 50;
+}
+
+function showCart(){
+let subtotal=0;
+const items=Object.entries(cartItems);
+document.getElementById("cart").innerHTML=items.length?items.map(([id,qty])=>{
+const p=productsData.find(x=>x.id==id);
+subtotal+=p.price*qty;
+return `<div class="cartitem">
+<span>${p.name}<br>₹${p.price} × ${qty}</span>
+<span>
+<button onclick="changeQty(${id},-1)">−</button>
+<button onclick="changeQty(${id},1)">+</button>
+</span></div>`;
+}).join(""):"Cart खाली है";
+
+document.getElementById("total").innerText=
+"कुल: ₹"+(subtotal+deliveryFee());
+
+document.getElementById("delivery").innerText=
+"Delivery Charge: ₹"+deliveryFee();
+}
+
+document.getElementById("distance").addEventListener("input",showCart);
+
+function placeOrder(){
+const name=document.getElementById("customer").value.trim();
+const phone=document.getElementById("phone").value.trim();
+const address=document.getElementById("address").value.trim();
+
+if(!name||!phone||!address){
+alert("कृपया नाम, मोबाइल और पूरा पता भरें।");
+return;
+}
+if(!/^[0-9]{10}$/.test(phone)){
+alert("10 अंकों का मोबाइल नंबर लिखें।");
+return;
+}
+if(!Object.keys(cartItems).length){
+alert("पहले Cart में Product जोड़ें।");
+return;
+}
+
+let subtotal=0;
+let lines=[];
+Object.entries(cartItems).forEach(([id,qty])=>{
+const p=productsData.find(x=>x.id==id);
+subtotal+=p.price*qty;
+lines.push(`${p.name} - Qty: ${qty} - ₹${p.price*qty}`);
+});
+
+const fee=deliveryFee();
+const total=subtotal+fee;
+const km=Number(document.getElementById("distance").value||0);
+
+const message=
+`INDIAN MEDICAL STORE - NEW ORDER
+
+Customer: ${name}
+Mobile: ${phone}
+Address: ${address}
+Distance: ${km} KM
+
+Products:
+${lines.join("\n")}
+
+Subtotal: ₹${subtotal}
+Delivery: ₹${fee}
+Total: ₹${total}
+
+कृपया Order Confirm करें।`;
+
+window.open("https://wa.me/917310807043?text="+encodeURIComponent(message),"_blank");
+}
+
+renderCategories();
+render();
+</script>
+
+</body>
+  </html>

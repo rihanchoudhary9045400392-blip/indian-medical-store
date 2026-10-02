@@ -1,518 +1,1232 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Indian Medical Store | Veterinary</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Indian Medical Store | Veterinary Medicines</title>
+<meta name="description" content="Indian Medical Store - Veterinary Medicines & Animal Health Care">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f1f3f6;color:#222}
-header{background:#2874f0;color:white;position:sticky;top:0;z-index:10}
-.top{max-width:1200px;margin:auto;padding:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.logo{font-size:19px;font-weight:bold;flex:1}
-.logo small{display:block;font-size:11px;font-weight:normal}
-.search{display:flex;background:white;border-radius:5px;flex:2;min-width:180px}
-.search input{width:100%;border:0;padding:12px;outline:0}
-.search button{border:0;background:white;padding:10px}
-button{cursor:pointer}
-.adminBtn,.cartBtn{border:0;padding:12px;border-radius:5px;font-weight:bold}
-.adminBtn{background:white;color:#2874f0}
-.cartBtn{background:#ff9f00;color:white}
-.hero{background:white;padding:22px 15px}
-.hero h1{margin:0 0 7px;font-size:24px}
-.hero p{margin:0;color:#666}
-.categories{display:flex;gap:8px;overflow:auto;background:white;padding:12px}
-.cat{border:1px solid #ddd;background:white;padding:9px 14px;border-radius:20px;white-space:nowrap}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f1f3f6;color:#17202a}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0}
+.top{background:#2874f0;color:white;padding:11px 4%;display:flex;align-items:center;gap:15px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px #0002}
+.logo{font-size:20px;font-weight:800;white-space:nowrap}
+.logo small{display:block;font-size:10px;font-weight:500}
+.search{flex:1;max-width:650px;background:white;border-radius:4px;display:flex}
+.search input{border:0;outline:0;padding:11px;width:100%;border-radius:4px}
+.search button{background:white;padding:0 14px;font-size:20px}
+.navbtn{background:white;color:#2874f0;padding:9px 13px;border-radius:4px;font-weight:bold;white-space:nowrap}
+.cartbtn{background:transparent;color:white;font-weight:bold;font-size:15px;white-space:nowrap}
+.hero{background:white;padding:25px 5%;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.hero h1{margin:0 0 8px;font-size:28px}
+.hero p{margin:5px 0;color:#555}
+.hero .badge{background:#e8f0fe;color:#2874f0;padding:10px 15px;border-radius:8px;font-weight:bold}
+.wrap{max-width:1250px;margin:auto;padding:15px}
+.categories{display:flex;gap:8px;overflow:auto;padding-bottom:12px}
+.cat{background:white;border:1px solid #ddd;border-radius:20px;padding:9px 16px;white-space:nowrap}
 .cat.active{background:#2874f0;color:white}
-.container{max-width:1200px;margin:auto;padding:16px 12px}
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
-.card{background:white;padding:12px;border-radius:6px;box-shadow:0 1px 5px #0002}
-.pic{height:170px;background:#fafafa;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.section{background:white;padding:15px;margin-bottom:15px;border-radius:5px}
+.section h2{margin:0 0 15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.card{background:white;border-radius:5px;overflow:hidden;border:1px solid #ddd;transition:.15s}
+.card:hover{box-shadow:0 3px 15px #0002;transform:translateY(-1px)}
+.pic{height:190px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .pic img{width:100%;height:100%;object-fit:contain}
-.emoji{font-size:60px}
+.noimg{font-size:55px;color:#bbb}
+.cardbody{padding:12px}
 .brand{font-size:12px;color:#777}
-.name{font-weight:bold;margin:6px 0;min-height:35px}
-.details{font-size:12px;color:#666;min-height:30px}
-.price{font-size:19px;font-weight:bold;margin-top:8px}
-.mrp{text-decoration:line-through;color:#888;font-size:12px;margin-left:6px}
-.stock{font-size:12px;color:green;margin:7px 0}
-.actions{display:flex;gap:6px}
-.actions button{flex:1;padding:10px;border-radius:4px;font-weight:bold}
-.add{background:white;color:#2874f0;border:1px solid #2874f0}
-.order{background:#ff9f00;color:white;border:0}
-.empty{background:white;padding:35px;text-align:center;color:#777}
-.overlay{display:none;position:fixed;inset:0;background:#0009;z-index:100;align-items:center;justify-content:center;padding:10px}
-.overlay.show{display:flex}
-.modal{background:white;width:100%;max-width:700px;max-height:94vh;overflow:auto;padding:18px;border-radius:8px}
-.close{float:right;border:0;border-radius:50%;width:34px;height:34px;font-size:21px}
+.pname{font-weight:bold;margin:4px 0;min-height:38px}
+.comp{font-size:12px;color:#666;height:34px;overflow:hidden}
+.price{font-size:19px;font-weight:bold;margin:8px 0}
+.mrp{text-decoration:line-through;color:#888;font-size:13px;margin-left:5px;font-weight:normal}
+.stock{font-size:12px;margin-bottom:8px}
+.in{color:#168a3d}.out{color:#c62828}
+.actions{display:flex;gap:7px}
+.actions button{flex:1;padding:9px;border-radius:4px;font-weight:bold}
+.add{background:#ff9f00;color:white}.buy{background:#fb641b;color:white}
+.details{background:#2874f0;color:white;width:100%;padding:9px;border-radius:4px;margin-top:7px}
+.footer{background:#17202a;color:white;text-align:center;padding:25px;margin-top:20px}
+.modal{position:fixed;inset:0;background:#0008;z-index:100;display:none;align-items:center;justify-content:center;padding:12px}
+.modal.show{display:flex}
+.box{background:white;width:min(900px,100%);max-height:94vh;overflow:auto;border-radius:8px;padding:18px;position:relative}
+.close{position:absolute;right:12px;top:10px;background:#eee;border-radius:50%;width:34px;height:34px;font-size:20px}
+.productdetail{display:grid;grid-template-columns:1fr 1fr;gap:25px}
+.bigpic{height:400px;background:#f7f7f7;display:flex;align-items:center;justify-content:center}
+.bigpic img{width:100%;height:100%;object-fit:contain}
 .form{display:grid;gap:10px}
-.form input,.form textarea,.adminGrid input,.adminGrid textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:4px;font:inherit}
-.form textarea,.adminGrid textarea{min-height:75px}
-.primary{width:100%;padding:13px;border:0;border-radius:4px;background:#2874f0;color:white;font-weight:bold;margin-top:10px}
-.whatsapp{background:#25d366}
-.adminGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.full{grid-column:1/-1}
-.adminProduct{padding:12px 0;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;gap:10px;align-items:center}
-.edit{background:#2874f0;color:white;border:0;padding:8px;border-radius:4px}
-.delete{background:#e53935;color:white;border:0;padding:8px;border-radius:4px}
-footer{background:#17202a;color:white;text-align:center;padding:25px}
-@media(max-width:600px){
- .logo{width:100%;flex-basis:100%}
- .search{order:3;flex-basis:100%}
- .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
- .pic{height:130px}
- .name{font-size:14px}
- .adminGrid{grid-template-columns:1fr}
- .full{grid-column:auto}
+.form input,.form textarea,.form select{width:100%;padding:11px;border:1px solid #ccc;border-radius:4px;outline:none}
+.form textarea{min-height:80px;resize:vertical}
+.primary{background:#2874f0;color:white;padding:11px 15px;border-radius:4px;font-weight:bold}
+.orange{background:#fb641b;color:white;padding:11px 15px;border-radius:4px;font-weight:bold}
+.green{background:#25d366;color:white;padding:11px 15px;border-radius:4px;font-weight:bold}
+.danger{background:#d32f2f;color:white;padding:9px;border-radius:4px}
+.secondary{background:#eee;padding:9px;border-radius:4px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.summary{background:#f7f7f7;padding:13px;border-radius:5px}
+.cartitem{display:grid;grid-template-columns:70px 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid #ddd;align-items:center}
+.cartitem img{width:65px;height:65px;object-fit:contain;background:#f5f5f5}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:28px;height:28px;background:#eee}
+.notice{padding:10px;background:#fff8e1;border-left:4px solid #ff9800;margin:8px 0}
+.success{background:#e8f5e9;border-left-color:#2e7d32}
+.error{background:#ffebee;border-left-color:#c62828}
+.adminnav{display:flex;gap:8px;overflow:auto;margin-bottom:15px}
+.adminnav button{padding:9px 12px;background:#eee;border-radius:4px;white-space:nowrap}
+.adminnav button.active{background:#2874f0;color:white}
+.adminsection{display:none}.adminsection.active{display:block}
+.adminproduct{display:grid;grid-template-columns:65px 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid #ddd;align-items:center}
+.adminproduct img{width:60px;height:60px;object-fit:contain;background:#f5f5f5}
+.order{border:1px solid #ddd;padding:13px;border-radius:6px;margin-bottom:12px}
+.orderhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.status{padding:5px 8px;border-radius:12px;background:#e3f2fd;color:#1565c0;font-size:12px;font-weight:bold}
+.hidden{display:none!important}
+.center{text-align:center}
+.muted{color:#777}
+hr{border:0;border-top:1px solid #ddd;margin:15px 0}
+.rating button{background:none;font-size:28px;padding:2px;color:#bbb}
+.rating button.selected{color:#ffb300}
+@media(max-width:700px){
+.top{flex-wrap:wrap;padding:9px 3%}.logo{width:100%}.search{order:3;max-width:none;width:100%}
+.hero{padding:18px 4%;display:block}.hero h1{font-size:22px}.hero .badge{display:inline-block;margin-top:10px}
+.productdetail{grid-template-columns:1fr}.bigpic{height:280px}.grid{grid-template-columns:repeat(2,1fr);gap:8px}
+.pic{height:145px}.cardbody{padding:8px}.pname{font-size:14px}.price{font-size:17px}
+.actions{display:block}.actions button{width:100%;margin-top:5px}
 }
 </style>
 </head>
 
 <body>
-<header>
-<div class="top">
-<div class="logo">
-INDIAN MEDICAL STORE
-<small>Veterinary Medicines & Animal Health Care</small>
-</div>
-<div class="search">
-<input id="search" placeholder="Search veterinary products...">
-<button id="searchBtn">🔍</button>
-</div>
-<button class="adminBtn" id="adminButton">ADMIN</button>
-<button class="cartBtn" id="cartButton">🛒 Cart (<span id="cartCount">0</span>)</button>
-</div>
+
+<header class="top">
+  <div class="logo">
+    INDIAN MEDICAL STORE
+    <small>VETERINARY MEDICINES & ANIMAL HEALTH CARE</small>
+  </div>
+
+  <div class="search">
+    <input id="search" placeholder="Search medicines, company, composition..." oninput="renderProducts()">
+    <button onclick="document.getElementById('search').focus()">🔍</button>
+  </div>
+
+  <button class="navbtn" onclick="openAdmin()">Admin</button>
+  <button class="cartbtn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
 </header>
 
 <section class="hero">
-<h1>Veterinary Medicines & Animal Health Care</h1>
-<p>Browse products and place your order online.</p>
+  <div>
+    <h1 id="storeName">INDIAN MEDICAL STORE</h1>
+    <p>Veterinary Medicines & Animal Health Care</p>
+    <p>🐄 🐃 🐐 🐕 🐈 🐔 🐎</p>
+  </div>
+  <div class="badge">💵 Cash on Delivery<br>📱 WhatsApp Ordering</div>
 </section>
 
-<div class="categories" id="categories"></div>
+<main class="wrap">
+  <div class="categories" id="categories"></div>
 
-<main class="container">
-<div id="products" class="products">
-<div class="empty">Loading products...</div>
-</div>
+  <section class="section">
+    <div class="row" style="justify-content:space-between">
+      <h2>Veterinary Products</h2>
+      <span class="muted" id="productCount"></span>
+    </div>
+    <div id="products" class="grid"></div>
+  </section>
+
+  <section class="section">
+    <h2>Customer Feedback</h2>
+    <p class="muted">Have an issue, suggestion or product feedback?</p>
+    <button class="primary" onclick="openFeedback()">⭐ Give Feedback / Complaint</button>
+  </section>
 </main>
 
-<footer>
-<b>INDIAN MEDICAL STORE</b>
-<p>Veterinary Medicines & Animal Health Care</p>
-<p>WhatsApp: +91 7310807043</p>
+<footer class="footer">
+  <b>INDIAN MEDICAL STORE</b><br>
+  Veterinary Medicines & Animal Health Care<br>
+  WhatsApp Orders: <b>7310807043</b><br><br>
+  <span class="muted">Delivery: 0–5 km Free | 5–10 km ₹30 | Above 10 km ₹50</span>
 </footer>
 
+<!-- PRODUCT -->
+<div class="modal" id="productModal">
+<div class="box">
+<button class="close" onclick="closeModal('productModal')">×</button>
+<div id="productDetail"></div>
+</div>
+</div>
+
 <!-- CART -->
-<div class="overlay" id="cartOverlay">
-<div class="modal">
-<button class="close" id="closeCart">×</button>
-<h2>Your Cart</h2>
+<div class="modal" id="cartModal">
+<div class="box">
+<button class="close" onclick="closeModal('cartModal')">×</button>
+<h2>🛒 Your Cart</h2>
 <div id="cartItems"></div>
-<h3>Subtotal: ₹<span id="cartTotal">0</span></h3>
-<button class="primary" id="checkoutButton">PROCEED TO CHECKOUT</button>
+<hr>
+<div id="cartTotal"></div>
+<div class="row">
+<button class="primary" onclick="openCheckout()">Proceed to Checkout</button>
+<button class="secondary" onclick="closeModal('cartModal')">Continue Shopping</button>
+</div>
 </div>
 </div>
 
 <!-- CHECKOUT -->
-<div class="overlay" id="checkoutOverlay">
-<div class="modal">
-<button class="close" id="closeCheckout">×</button>
-<h2>Checkout</h2>
-<div class="form">
-<input id="customerName" placeholder="Customer Name">
-<input id="customerPhone" type="tel" placeholder="10-digit Mobile Number">
-<textarea id="customerAddress" placeholder="Full Delivery Address"></textarea>
-<input id="landmark" placeholder="Landmark">
-<input id="distance" type="number" min="0" step="0.1" placeholder="Distance from Store (KM)">
-<div><b>Delivery:</b> <span id="deliveryText">Enter distance</span></div>
-<select id="payment">
-<option value="Cash on Delivery">Cash on Delivery</option>
-</select>
-<h3>Total: ₹<span id="checkoutTotal">0</span></h3>
-<button class="primary whatsapp" id="placeOrder">PLACE ORDER ON WHATSAPP</button>
+<div class="modal" id="checkoutModal">
+<div class="box">
+<button class="close" onclick="closeModal('checkoutModal')">×</button>
+<h2>📦 Checkout</h2>
+<div id="checkoutMsg"></div>
+
+<form class="form" onsubmit="placeOrder(event)">
+<input id="cName" required placeholder="Customer Name">
+<input id="cPhone" required inputmode="tel" placeholder="Mobile Number">
+<textarea id="cAddress" required placeholder="Complete Delivery Address"></textarea>
+<input id="cLandmark" placeholder="Landmark">
+<div class="row">
+<button type="button" class="primary" onclick="getLocation()">📍 Use My Current GPS Location</button>
+<span id="gpsText" class="muted">Location not captured</span>
 </div>
+
+<input id="manualDistance" type="number" min="0" step="0.1" placeholder="Distance from store in KM (only if GPS/store location is unavailable)" oninput="calculateDelivery()">
+
+<select id="payment">
+<option value="COD">Cash on Delivery</option>
+</select>
+
+<div class="summary">
+<b>Order Summary</b>
+<div id="checkoutSummary"></div>
+</div>
+
+<button class="green" type="submit">📱 Place Order on WhatsApp</button>
+</form>
+</div>
+</div>
+
+<!-- FEEDBACK -->
+<div class="modal" id="feedbackModal">
+<div class="box">
+<button class="close" onclick="closeModal('feedbackModal')">×</button>
+<h2>⭐ Feedback / Complaint</h2>
+<form class="form" onsubmit="submitFeedback(event)">
+<input id="fName" required placeholder="Your Name">
+<input id="fPhone" required placeholder="Mobile Number">
+<input id="fOrder" placeholder="Order ID (optional)">
+<select id="fProduct">
+<option value="">Select Product (optional)</option>
+</select>
+<div>
+<div>Rating</div>
+<div class="rating" id="ratingStars">
+<button type="button" onclick="setRating(1)">★</button>
+<button type="button" onclick="setRating(2)">★</button>
+<button type="button" onclick="setRating(3)">★</button>
+<button type="button" onclick="setRating(4)">★</button>
+<button type="button" onclick="setRating(5)">★</button>
+</div>
+</div>
+<textarea id="fReview" placeholder="Your feedback"></textarea>
+<textarea id="fComplaint" placeholder="Complaint, if any"></textarea>
+<button class="primary" type="submit">Submit Feedback</button>
+</form>
 </div>
 </div>
 
 <!-- ADMIN -->
-<div class="overlay" id="adminOverlay">
-<div class="modal">
-<button class="close" id="closeAdmin">×</button>
+<div class="modal" id="adminModal">
+<div class="box">
+<button class="close" onclick="closeModal('adminModal')">×</button>
+
 <div id="adminLogin">
-<h2>Admin Login</h2>
-<div class="form">
-<input id="adminEmail" type="email" placeholder="Admin Email">
-<input id="adminPassword" type="password" placeholder="Password">
-<button class="primary" id="loginButton">LOGIN</button>
-</div>
+<h2>🔐 Admin Login</h2>
+<form class="form" onsubmit="adminLogin(event)">
+<input id="adminEmail" type="email" placeholder="Admin Email" required>
+<input id="adminPassword" type="password" placeholder="Password" required>
+<button class="primary">Login</button>
+</form>
+<br>
+<button class="secondary" onclick="resetPassword()">Forgot Password / Reset Password</button>
+<div id="loginMsg"></div>
 </div>
 
-<div id="adminPanel" style="display:none">
-<h2>Admin Panel</h2>
+<div id="adminPanel" class="hidden">
+<div class="row" style="justify-content:space-between">
+<h2>⚙️ Admin Panel</h2>
+<button class="danger" onclick="adminLogout()">Logout</button>
+</div>
+
+<div class="adminnav">
+<button class="active" onclick="adminTab('catalog',this)">Products</button>
+<button onclick="adminTab('orders',this)">Orders</button>
+<button onclick="adminTab('feedback',this)">Feedback</button>
+<button onclick="adminTab('settings',this)">Store Settings</button>
+</div>
+
+<section id="admin-catalog" class="adminsection active">
 <h3>Add / Edit Product</h3>
-
-<div class="adminGrid">
-<input id="pName" placeholder="Product Name">
-<input id="pBrand" placeholder="Brand / Company">
+<form class="form" onsubmit="saveProduct(event)">
+<input type="hidden" id="pId">
+<input id="pName" required placeholder="Product Name">
+<input id="pBrand" placeholder="Company / Brand">
 <input id="pComposition" placeholder="Composition">
-<input id="pCategory" placeholder="Category">
-<input id="pPrice" type="number" min="0" placeholder="Selling Price">
-<input id="pMrp" type="number" min="0" placeholder="MRP">
-<input id="pStock" type="number" min="0" placeholder="Stock">
-<input id="pImage" placeholder="Image URL (optional)">
-<label class="full">Upload Product Photo
-<input id="pImageFile" type="file" accept="image/*">
+<input id="pCategory" placeholder="Category e.g. Injection, Tablet, Powder, Liquid">
+<input id="pPack" placeholder="Pack Size e.g. 100 ml, 10 tablets">
+<input id="pMrp" type="number" min="0" step="0.01" placeholder="MRP">
+<input id="pPrice" type="number" min="0" step="0.01" placeholder="Selling Price">
+<input id="pStock" type="number" min="0" step="1" placeholder="Stock">
+<textarea id="pDetails" placeholder="Product details / uses / description"></textarea>
+
+<label>
+Product Image
+<input id="pImage" type="file" accept="image/*" onchange="previewImage(event)">
 </label>
-<div class="full" id="imagePreview"></div>
-<textarea id="pDetails" class="full" placeholder="Product Details"></textarea>
+
+<div id="imagePreview" class="center"></div>
+
+<label>
+<input type="checkbox" id="pActive" checked>
+ Product Active / Visible
+</label>
+
+<div class="row">
+<button class="primary" type="submit">💾 Save Product</button>
+<button class="secondary" type="button" onclick="clearProductForm()">Clear</button>
+</div>
+<div id="productSaveMsg"></div>
+</form>
+
+<hr>
+<h3>All Products</h3>
+<div id="adminProducts"></div>
+</section>
+
+<section id="admin-orders" class="adminsection">
+<h3>Customer Orders</h3>
+<div id="adminOrders"></div>
+</section>
+
+<section id="admin-feedback" class="adminsection">
+<h3>Customer Feedback / Complaints</h3>
+<div id="adminFeedback"></div>
+</section>
+
+<section id="admin-settings" class="adminsection">
+<h3>Store Settings</h3>
+<p class="muted">GPS distance calculation के लिए अपने store की exact latitude/longitude यहाँ एक बार भरें.</p>
+
+<form class="form" onsubmit="saveSettings(event)">
+<input id="sName" placeholder="Store Name">
+<input id="sWhatsapp" placeholder="WhatsApp Number">
+<input id="sLat" type="number" step="any" placeholder="Store Latitude">
+<input id="sLng" type="number" step="any" placeholder="Store Longitude">
+<input id="sFree" type="number" step="0.1" placeholder="Free delivery up to KM">
+<input id="sTier2" type="number" step="0.1" placeholder="Second tier up to KM">
+<input id="sFee2" type="number" step="1" placeholder="Fee for second tier">
+<input id="sFee3" type="number" step="1" placeholder="Fee above second tier">
+<button class="primary">Save Store Settings</button>
+</form>
+<div id="settingsMsg"></div>
+</section>
+
+</div>
+</div>
 </div>
 
-<button class="primary" id="saveProduct">SAVE PRODUCT</button>
-<button class="primary" id="clearForm" style="background:#666">CLEAR FORM</button>
-<button class="primary" id="logoutButton" style="background:#555">LOGOUT</button>
-<h3>Products</h3>
-<div id="adminProducts">Loading...</div>
-</div>
-</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-"use strict";
-
 const SUPABASE_URL="https://aynknzitmmadeuvzlmxo.supabase.co";
 const SUPABASE_KEY="sb_publishable_Xjd5t8L2Wx8Yj8Oax04fBA_TC5J1itC";
-const WHATSAPP="917310807043";
-const BUCKET="product-images";
-
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 let products=[];
-let cart=[];
-let editingId=null;
+let cart=JSON.parse(localStorage.getItem("ims_cart")||"[]");
 let selectedCategory="All";
-let uploadedImageUrl="";
+let currentProduct=null;
+let latitude=null,longitude=null;
+let rating=0;
+let settings={
+store_name:"INDIAN MEDICAL STORE",
+whatsapp:"7310807043",
+store_latitude:null,
+store_longitude:null,
+free_delivery_km:5,
+tier2_delivery_km:10,
+tier2_fee:30,
+tier3_fee:50
+};
 
-const $=id=>document.getElementById(id);
-
-function escapeHtml(v){
- return String(v??"").replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
- }[c]));
+function esc(v){
+return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 }
 
-function money(v){return Number(v||0).toLocaleString("en-IN");}
+function money(v){
+return "₹"+Number(v||0).toFixed(2);
+}
+
+function closeModal(id){
+document.getElementById(id).classList.remove("show");
+}
+
+function openModal(id){
+document.getElementById(id).classList.add("show");
+}
+
+function saveCart(){
+localStorage.setItem("ims_cart",JSON.stringify(cart));
+updateCartCount();
+}
+
+function updateCartCount(){
+document.getElementById("cartCount").textContent=cart.reduce((a,b)=>a+b.quantity,0);
+}
+
+async function loadSettings(){
+const {data,error}=await sb.from("store_settings").select("*").eq("id",1).maybeSingle();
+if(!error && data){
+settings={...settings,...data};
+document.getElementById("storeName").textContent=settings.store_name||"INDIAN MEDICAL STORE";
+}
+}
 
 async function loadProducts(){
- const r=await db.from("products").select("*")
- .eq("is_active",true).order("created_at",{ascending:false});
-
- if(r.error){
-  $("products").innerHTML='<div class="empty">Products could not load. Please refresh.</div>';
-  console.error(r.error);
-  return;
- }
- products=r.data||[];
- buildCategories();
- renderProducts();
+const {data,error}=await sb.from("products").select("*").eq("is_active",true).order("name");
+if(error){
+document.getElementById("products").innerHTML="<div class='notice error'>Products load नहीं हो रहे हैं. Supabase connection check करें.</div>";
+return;
+}
+products=data||[];
+renderCategories();
+renderProducts();
+fillFeedbackProducts();
 }
 
-function buildCategories(){
- const cats=["All",...new Set(products.map(p=>p.category).filter(Boolean))];
- $("categories").innerHTML=cats.map(c=>
- `<button class="cat ${c===selectedCategory?"active":""}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`
- ).join("");
- document.querySelectorAll("[data-cat]").forEach(b=>{
-  b.onclick=()=>{selectedCategory=b.dataset.cat;buildCategories();renderProducts();};
- });
+function renderCategories(){
+let cats=["All",...new Set(products.map(p=>p.category).filter(Boolean))];
+document.getElementById("categories").innerHTML=cats.map(c=>
+`<button class="cat ${selectedCategory===c?"active":""}" onclick="selectCategory(${JSON.stringify(c)})">${esc(c)}</button>`
+).join("");
+}
+
+function selectCategory(c){
+selectedCategory=c;
+renderCategories();
+renderProducts();
 }
 
 function renderProducts(){
- const q=$("search").value.toLowerCase().trim();
- const list=products.filter(p=>{
-  const words=[p.name,p.brand,p.composition,p.details].join(" ").toLowerCase();
-  return words.includes(q)&&(selectedCategory==="All"||p.category===selectedCategory);
- });
- if(!list.length){
-  $("products").innerHTML='<div class="empty">No products available. Please check again later.</div>';
-  return;
- }
- $("products").innerHTML=list.map(p=>{
-  const price=Number(p.selling_price||0);
-  const stock=Number(p.stock||0);
-  const image=p.image_url
-   ? `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" onerror="this.style.display='none'">`
-   : '<span class="emoji">💊</span>';
-  return `<article class="card">
-   <div class="pic">${image}</div>
-   <div class="brand">${escapeHtml(p.brand||"Veterinary")}</div>
-   <div class="name">${escapeHtml(p.name)}</div>
-   <div class="details">${escapeHtml(p.composition||p.details||"Veterinary Product")}</div>
-   <div class="price">₹${money(price)} ${Number(p.mrp)>price?`<span class="mrp">₹${money(p.mrp)}</span>`:""}</div>
-   <div class="stock">${stock>0?"In Stock":"Out of Stock"}</div>
-   <div class="actions">
-   <button class="add" ${stock<=0?"disabled":""} data-add="${p.id}">ADD TO CART</button>
-   <button class="order" ${stock<=0?"disabled":""} data-order="${p.id}">ORDER NOW</button>
-   </div>
-  </article>`;
- }).join("");
+let q=(document.getElementById("search").value||"").toLowerCase().trim();
+let list=products.filter(p=>{
+let matchCat=selectedCategory==="All"||p.category===selectedCategory;
+let text=[p.name,p.brand,p.composition,p.category,p.pack_size].join(" ").toLowerCase();
+return matchCat&&text.includes(q);
+});
+document.getElementById("productCount").textContent=list.length+" products";
 
- document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>addToCart(b.dataset.add));
- document.querySelectorAll("[data-order]").forEach(b=>b.onclick=()=>{
-  addToCart(b.dataset.order,true);openModal("checkoutOverlay");
- });
+if(!list.length){
+document.getElementById("products").innerHTML="<div class='notice'>No products found.</div>";
+return;
 }
 
-function addToCart(id,quiet=false){
- const p=products.find(x=>String(x.id)===String(id));
- if(!p)return;
- const stock=Number(p.stock||0);
- if(stock<=0){alert("Out of stock.");return;}
- const old=cart.find(x=>String(x.id)===String(id));
- if(old){if(old.qty<stock)old.qty++;}
- else cart.push({...p,qty:1});
- updateCart();
- if(!quiet)alert("Added to cart.");
+document.getElementById("products").innerHTML=list.map(p=>{
+let img=p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}">`:`<div class="noimg">💊</div>`;
+let stock=Number(p.stock||0);
+return `
+<div class="card">
+<div class="pic" onclick="openProduct('${p.id}')">${img}</div>
+<div class="cardbody">
+<div class="brand">${esc(p.brand||"Veterinary")}</div>
+<div class="pname">${esc(p.name)}</div>
+<div class="comp">${esc(p.composition||"")}</div>
+<div class="price">${money(p.selling_price)} ${p.mrp?`<span class="mrp">${money(p.mrp)}</span>`:""}</div>
+<div class="stock ${stock>0?"in":"out"}">${stock>0?"In Stock":"Out of Stock"}</div>
+<div class="actions">
+<button class="add" ${stock<=0?"disabled":""} onclick="addToCart('${p.id}')">Add to Cart</button>
+<button class="buy" ${stock<=0?"disabled":""} onclick="buyNow('${p.id}')">Buy Now</button>
+</div>
+<button class="details" onclick="openProduct('${p.id}')">View Details</button>
+</div>
+</div>`;
+}).join("");
 }
 
-function updateCart(){
- $("cartCount").innerText=cart.reduce((s,p)=>s+p.qty,0);
- renderCart();
- calculateTotal();
+function openProduct(id){
+let p=products.find(x=>x.id===id);
+if(!p)return;
+currentProduct=p;
+
+history.pushState({product:id},"","?product="+encodeURIComponent(id));
+
+let img=p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}">`:`<div class="noimg">💊</div>`;
+document.getElementById("productDetail").innerHTML=`
+<div class="productdetail">
+<div class="bigpic">${img}</div>
+<div>
+<div class="brand">${esc(p.brand||"Veterinary")}</div>
+<h2>${esc(p.name)}</h2>
+<p><b>Composition:</b> ${esc(p.composition||"Not specified")}</p>
+<p><b>Category:</b> ${esc(p.category||"Veterinary")}</p>
+<p><b>Pack Size:</b> ${esc(p.pack_size||"")}</p>
+<p>${esc(p.details||"Product details not added yet.")}</p>
+<h2>${money(p.selling_price)} ${p.mrp?`<span class="mrp">${money(p.mrp)}</span>`:""}</h2>
+<p class="${Number(p.stock)>0?"in":"out"}">${Number(p.stock)>0?"In Stock":"Out of Stock"}</p>
+<div class="row">
+<button class="add" style="padding:12px 18px" onclick="addToCart('${p.id}')">🛒 Add to Cart</button>
+<button class="buy" style="padding:12px 18px" onclick="buyNow('${p.id}')">⚡ Order Now</button>
+</div>
+</div>
+</div>`;
+openModal("productModal");
+}
+
+function addToCart(id){
+let p=products.find(x=>x.id===id);
+if(!p||Number(p.stock)<=0)return alert("Product is out of stock.");
+let item=cart.find(x=>x.product_id===id);
+if(item)item.quantity++;
+else cart.push({product_id:id,quantity:1});
+saveCart();
+alert("Added to cart.");
+}
+
+function buyNow(id){
+let p=products.find(x=>x.id===id);
+if(!p||Number(p.stock)<=0)return alert("Product is out of stock.");
+cart=[{product_id:id,quantity:1}];
+saveCart();
+closeModal("productModal");
+openCheckout();
+}
+
+function openCart(){
+renderCart();
+openModal("cartModal");
 }
 
 function renderCart(){
- if(!cart.length){
-  $("cartItems").innerHTML='<div class="empty">Your cart is empty.</div>';
-  $("cartTotal").innerText="0";return;
- }
- $("cartItems").innerHTML=cart.map((p,i)=>`
- <div class="adminProduct">
- <div><b>${escapeHtml(p.name)}</b><br>₹${money(p.selling_price)} × ${p.qty}</div>
- <div>
- <button class="edit" data-minus="${i}">−</button>
- <button class="edit" data-plus="${i}">+</button>
- <button class="delete" data-remove="${i}">×</button>
- </div></div>`).join("");
- $("cartTotal").innerText=money(cart.reduce((s,p)=>s+Number(p.selling_price||0)*p.qty,0));
- document.querySelectorAll("[data-minus]").forEach(b=>b.onclick=()=>changeQty(+b.dataset.minus,-1));
- document.querySelectorAll("[data-plus]").forEach(b=>b.onclick=()=>changeQty(+b.dataset.plus,1));
- document.querySelectorAll("[data-remove]").forEach(b=>b.onclick=()=>{
-  cart.splice(+b.dataset.remove,1);updateCart();
- });
+if(!cart.length){
+document.getElementById("cartItems").innerHTML="<div class='notice'>Your cart is empty.</div>";
+document.getElementById("cartTotal").innerHTML="";
+return;
+}
+
+let total=0;
+document.getElementById("cartItems").innerHTML=cart.map((item,i)=>{
+let p=products.find(x=>x.id===item.product_id);
+if(!p)return "";
+let line=Number(p.selling_price)*item.quantity;
+total+=line;
+let img=p.image_url?`<img src="${esc(p.image_url)}">`:`<div style="width:65px;height:65px;background:#f5f5f5;text-align:center;padding-top:18px">💊</div>`;
+return `<div class="cartitem">
+${img}
+<div>
+<b>${esc(p.name)}</b><br>
+<span>${money(p.selling_price)}</span>
+<div class="qty">
+<button onclick="changeQty(${i},-1)">−</button>
+<b>${item.quantity}</b>
+<button onclick="changeQty(${i},1)">+</button>
+</div>
+</div>
+<div><b>${money(line)}</b><br><button class="danger" onclick="removeCart(${i})">Delete</button></div>
+</div>`;
+}).join("");
+
+document.getElementById("cartTotal").innerHTML=`<h3>Products Total: ${money(total)}</h3>`;
 }
 
 function changeQty(i,n){
- const p=cart[i];if(!p)return;
- p.qty+=n;
- if(p.qty<=0)cart.splice(i,1);
- else if(p.qty>Number(p.stock))p.qty=Number(p.stock);
- updateCart();
+let p=products.find(x=>x.id===cart[i].product_id);
+cart[i].quantity+=n;
+if(cart[i].quantity<=0)cart.splice(i,1);
+if(p && cart[i] && cart[i].quantity>Number(p.stock))cart[i].quantity=Number(p.stock);
+saveCart();
+renderCart();
 }
 
-function calculateTotal(){
- const subtotal=cart.reduce((s,p)=>s+Number(p.selling_price||0)*p.qty,0);
- const km=parseFloat($("distance").value);
- let fee=0;
- if(Number.isFinite(km)&&km>=0){
-  if(km<=5){fee=0;$("deliveryText").innerText="FREE delivery";}
-  else if(km<=10){fee=30;$("deliveryText").innerText="₹30";}
-  else{fee=50;$("deliveryText").innerText="₹50";}
- }else $("deliveryText").innerText="Enter distance from Store";
- $("checkoutTotal").innerText=money(subtotal+fee);
- return {subtotal,fee,total:subtotal+fee};
+function removeCart(i){
+cart.splice(i,1);
+saveCart();
+renderCart();
 }
 
-function openModal(id){$(id).classList.add("show");}
-function closeModal(id){$(id).classList.remove("show");}
+async function ensureCustomerAuth(){
+let {data}=await sb.auth.getSession();
+if(data.session)return data.session.user;
 
-$("adminButton").onclick=async()=>{
- openModal("adminOverlay");
- $("adminLogin").style.display="block";
- $("adminPanel").style.display="none";
- const {data}=await db.auth.getSession();
- if(data.session)await showAdminPanel();
+let result=await sb.auth.signInAnonymously();
+if(result.error){
+throw new Error("Customer login service is not enabled in Supabase. Please enable Anonymous Sign-ins in Supabase Authentication.");
+}
+return result.data.user;
+}
+
+function openCheckout(){
+if(!cart.length)return alert("Cart is empty.");
+closeModal("cartModal");
+closeModal("productModal");
+renderCheckoutSummary();
+openModal("checkoutModal");
+}
+
+function renderCheckoutSummary(){
+let total=0;
+let html="";
+cart.forEach(item=>{
+let p=products.find(x=>x.id===item.product_id);
+if(!p)return;
+let line=Number(p.selling_price)*item.quantity;
+total+=line;
+html+=`<div>${esc(p.name)} × ${item.quantity} = <b>${money(line)}</b></div>`;
+});
+html+=`<hr><div>Products Total: <b>${money(total)}</b></div>`;
+html+=`<div>Delivery Fee: <b id="deliveryFee">${money(0)}</b></div>`;
+html+=`<div>Total Payable: <b id="grandTotal">${money(total)}</b></div>`;
+document.getElementById("checkoutSummary").innerHTML=html;
+calculateDelivery();
+}
+
+function getLocation(){
+if(!navigator.geolocation){
+document.getElementById("gpsText").textContent="GPS not supported";
+return;
+}
+document.getElementById("gpsText").textContent="Getting location...";
+navigator.geolocation.getCurrentPosition(pos=>{
+latitude=pos.coords.latitude;
+longitude=pos.coords.longitude;
+document.getElementById("gpsText").textContent=`GPS captured: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+calculateDelivery();
+},err=>{
+document.getElementById("gpsText").textContent="GPS permission denied/unavailable";
+alert("Location permission allow करें. अगर नहीं हो पा रहा है तो distance KM manually भर सकते हैं.");
+},{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+}
+
+function distanceKm(lat1,lon1,lat2,lon2){
+const R=6371;
+const dLat=(lat2-lat1)*Math.PI/180;
+const dLon=(lon2-lon1)*Math.PI/180;
+const a=Math.sin(dLat/2)**2+
+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function getDistance(){
+if(latitude!=null&&longitude!=null&&settings.store_latitude!=null&&settings.store_longitude!=null){
+return distanceKm(latitude,longitude,Number(settings.store_latitude),Number(settings.store_longitude));
+}
+let x=parseFloat(document.getElementById("manualDistance").value);
+return isNaN(x)?null:x;
+}
+
+function deliveryFeeForDistance(d){
+if(d===null)return 0;
+if(d<=Number(settings.free_delivery_km||5))return 0;
+if(d<=Number(settings.tier2_delivery_km||10))return Number(settings.tier2_fee||30);
+return Number(settings.tier3_fee||50);
+}
+
+function calculateDelivery(){
+let d=getDistance();
+let fee=deliveryFeeForDistance(d);
+let productTotal=cart.reduce((sum,item)=>{
+let p=products.find(x=>x.id===item.product_id);
+return sum+(p?Number(p.selling_price)*item.quantity:0);
+},0);
+
+let feeEl=document.getElementById("deliveryFee");
+let totalEl=document.getElementById("grandTotal");
+if(feeEl)feeEl.textContent=money(fee);
+if(totalEl)totalEl.textContent=money(productTotal+fee);
+}
+
+async function placeOrder(e){
+e.preventDefault();
+if(!cart.length)return;
+
+let msg=document.getElementById("checkoutMsg");
+msg.innerHTML="<div class='notice'>Order submit हो रहा है...</div>";
+
+try{
+let user=await ensureCustomerAuth();
+
+let name=document.getElementById("cName").value.trim();
+let phone=document.getElementById("cPhone").value.trim();
+let address=document.getElementById("cAddress").value.trim();
+let landmark=document.getElementById("cLandmark").value.trim();
+let distance=getDistance();
+
+if(!name||!phone||!address)throw new Error("Name, mobile and address required.");
+
+let productTotal=0;
+for(const item of cart){
+let p=products.find(x=>x.id===item.product_id);
+if(!p)continue;
+if(Number(p.stock)<item.quantity)throw new Error(p.name+" has insufficient stock.");
+productTotal+=Number(p.selling_price)*item.quantity;
+}
+
+let fee=deliveryFeeForDistance(distance);
+let total=productTotal+fee;
+
+let orderData={
+customer_id:user.id,
+customer_name:name,
+phone:phone,
+address:address,
+landmark:landmark,
+latitude:latitude,
+longitude:longitude,
+distance_km:distance,
+delivery_fee:fee,
+payment_method:"COD",
+status:"New",
+total:total,
+whatsapp_order:true
 };
-$("closeAdmin").onclick=()=>closeModal("adminOverlay");
-$("cartButton").onclick=()=>openModal("cartOverlay");
-$("closeCart").onclick=()=>closeModal("cartOverlay");
-$("closeCheckout").onclick=()=>closeModal("checkoutOverlay");
-$("checkoutButton").onclick=()=>{
- if(!cart.length){alert("Add products first.");return;}
- closeModal("cartOverlay");openModal("checkoutOverlay");calculateTotal();
+
+let {data:order,error:orderError}=await sb.from("orders").insert(orderData).select().single();
+if(orderError)throw orderError;
+
+let items=cart.map(item=>{
+let p=products.find(x=>x.id===item.product_id);
+return {
+order_id:order.id,
+product_id:p.id,
+product_name:p.name,
+quantity:item.quantity,
+unit_price:p.selling_price
 };
-$("distance").oninput=calculateTotal;
-$("search").oninput=renderProducts;
-$("searchBtn").onclick=renderProducts;
+});
 
-$("loginButton").onclick=adminLogin;
+let {error:itemError}=await sb.from("order_items").insert(items);
+if(itemError)throw itemError;
 
-async function adminLogin(){
- const email=$("adminEmail").value.trim();
- const password=$("adminPassword").value;
- if(!email||!password){alert("Enter email and password.");return;}
- const {data,error}=await db.auth.signInWithPassword({email,password});
- if(error){alert("Login failed: "+error.message);return;}
- if(data.user?.app_metadata?.role!=="admin"){
-  await db.auth.signOut();
-  alert("This account is not authorized as store admin.");
-  return;
- }
- await showAdminPanel();
+let lines=[
+"*INDIAN MEDICAL STORE - NEW ORDER*",
+"Order ID: "+order.id,
+"",
+"Customer: "+name,
+"Mobile: "+phone,
+"Address: "+address,
+"Landmark: "+(landmark||"-"),
+"Payment: COD",
+"",
+"*Products:*"
+];
+
+cart.forEach(item=>{
+let p=products.find(x=>x.id===item.product_id);
+if(p)lines.push(`${p.name} × ${item.quantity} = ${money(Number(p.selling_price)*item.quantity)}`);
+});
+
+lines.push("");
+lines.push("Products Total: "+money(productTotal));
+lines.push("Distance: "+(distance!==null?distance.toFixed(2)+" KM":"Not provided"));
+lines.push("Delivery Fee: "+money(fee));
+lines.push("*Total: "+money(total)+"*");
+
+if(latitude!=null&&longitude!=null){
+lines.push("");
+lines.push("Customer GPS: https://www.google.com/maps?q="+latitude+","+longitude);
 }
 
-async function showAdminPanel(){
- const {data}=await db.auth.getUser();
- if(data.user?.app_metadata?.role!=="admin"){
-  alert("Admin access is not enabled for this account.");
-  return;
- }
- $("adminLogin").style.display="none";
- $("adminPanel").style.display="block";
- await renderAdminProducts();
+let wa=settings.whatsapp||"7310807043";
+wa=String(wa).replace(/\D/g,"");
+if(wa.length===10)wa="91"+wa;
+
+let url="https://wa.me/"+wa+"?text="+encodeURIComponent(lines.join("\n"));
+
+cart=[];
+saveCart();
+
+msg.innerHTML=`<div class="notice success">
+<b>Order Created Successfully!</b><br>
+Order ID: ${esc(order.id)}<br>
+Total: ${money(total)}
+</div>
+<a class="green" style="display:inline-block;text-decoration:none;margin-top:10px" href="${url}" target="_blank">📱 Open WhatsApp & Send Order</a>`;
+
+}catch(err){
+console.error(err);
+msg.innerHTML=`<div class="notice error">${esc(err.message||"Order failed.")}</div>`;
+}
 }
 
-$("logoutButton").onclick=async()=>{
- await db.auth.signOut();
- $("adminPanel").style.display="none";
- $("adminLogin").style.display="block";
- alert("Logged out.");
+function openFeedback(){
+fillFeedbackProducts();
+openModal("feedbackModal");
+}
+
+function fillFeedbackProducts(){
+let select=document.getElementById("fProduct");
+if(!select)return;
+select.innerHTML='<option value="">Select Product (optional)</option>'+
+products.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+}
+
+function setRating(n){
+rating=n;
+document.querySelectorAll("#ratingStars button").forEach((b,i)=>{
+b.classList.toggle("selected",i<n);
+});
+}
+
+async function submitFeedback(e){
+e.preventDefault();
+try{
+let user=await ensureCustomerAuth();
+let data={
+customer_id:user.id,
+order_id:document.getElementById("fOrder").value.trim()||null,
+product_id:document.getElementById("fProduct").value||null,
+rating:rating||null,
+review:document.getElementById("fReview").value.trim(),
+complaint:document.getElementById("fComplaint").value.trim(),
+status:"New"
+};
+let {error}=await sb.from("feedback").insert(data);
+if(error)throw error;
+alert("Thank you. Your feedback has been submitted.");
+closeModal("feedbackModal");
+}catch(err){
+alert(err.message||"Feedback submit failed.");
+}
+}
+
+/* ADMIN */
+
+function openAdmin(){
+openModal("adminModal");
+checkAdmin();
+}
+
+async function checkAdmin(){
+let {data}=await sb.auth.getSession();
+if(data.session && data.session.user){
+let role=data.session.user.app_metadata?.role;
+if(role==="admin"){
+document.getElementById("adminLogin").classList.add("hidden");
+document.getElementById("adminPanel").classList.remove("hidden");
+loadAdminProducts();
+loadAdminOrders();
+loadAdminFeedback();
+loadAdminSettings();
+return;
+}
+}
+document.getElementById("adminLogin").classList.remove("hidden");
+document.getElementById("adminPanel").classList.add("hidden");
+}
+
+async function adminLogin(e){
+e.preventDefault();
+let email=document.getElementById("adminEmail").value.trim();
+let password=document.getElementById("adminPassword").value;
+let msg=document.getElementById("loginMsg");
+msg.innerHTML="<div class='notice'>Logging in...</div>";
+
+let {data,error}=await sb.auth.signInWithPassword({email,password});
+if(error){
+msg.innerHTML=`<div class="notice error">${esc(error.message)}</div>`;
+return;
+}
+
+if(data.user?.app_metadata?.role!=="admin"){
+await sb.auth.signOut();
+msg.innerHTML="<div class='notice error'>This account is not an admin.</div>";
+return;
+}
+
+msg.innerHTML="";
+checkAdmin();
+}
+
+async function resetPassword(){
+let email=document.getElementById("adminEmail").value.trim();
+if(!email)return alert("Admin email enter करें.");
+
+let {error}=await sb.auth.resetPasswordForEmail(email,{
+redirectTo:location.origin+location.pathname
+});
+
+if(error)alert(error.message);
+else alert("Password reset email sent. Supabase Auth में इस website URL को Redirect URL में allow होना चाहिए.");
+}
+
+async function adminLogout(){
+await sb.auth.signOut();
+checkAdmin();
+}
+
+function adminTab(tab,btn){
+document.querySelectorAll(".adminnav button").forEach(x=>x.classList.remove("active"));
+btn.classList.add("active");
+document.querySelectorAll(".adminsection").forEach(x=>x.classList.remove("active"));
+document.getElementById("admin-"+tab).classList.add("active");
+
+if(tab==="catalog")loadAdminProducts();
+if(tab==="orders")loadAdminOrders();
+if(tab==="feedback")loadAdminFeedback();
+if(tab==="settings")loadAdminSettings();
+}
+
+async function loadAdminProducts(){
+let {data,error}=await sb.from("products").select("*").order("created_at",{ascending:false});
+if(error){
+document.getElementById("adminProducts").innerHTML="<div class='notice error'>"+esc(error.message)+"</div>";
+return;
+}
+
+document.getElementById("adminProducts").innerHTML=(data||[]).map(p=>{
+let img=p.image_url?`<img src="${esc(p.image_url)}">`:`<div>💊</div>`;
+return `<div class="adminproduct">
+${img}
+<div>
+<b>${esc(p.name)}</b><br>
+<span class="muted">${esc(p.brand||"")} | ${money(p.selling_price)} | Stock: ${p.stock}</span><br>
+<span class="muted">${esc(p.category||"")}</span>
+</div>
+<div class="row">
+<button class="primary" onclick='editProduct(${JSON.stringify(p).replace(/'/g,"&#39;")})'>Edit</button>
+<button class="danger" onclick="deleteProduct('${p.id}')">Delete</button>
+</div>
+</div>`;
+}).join("")||"<div class='muted'>No products yet.</div>";
+}
+
+function editProduct(p){
+document.getElementById("pId").value=p.id||"";
+document.getElementById("pName").value=p.name||"";
+document.getElementById("pBrand").value=p.brand||"";
+document.getElementById("pComposition").value=p.composition||"";
+document.getElementById("pCategory").value=p.category||"";
+document.getElementById("pPack").value=p.pack_size||"";
+document.getElementById("pMrp").value=p.mrp||"";
+document.getElementById("pPrice").value=p.selling_price||"";
+document.getElementById("pStock").value=p.stock||"";
+document.getElementById("pDetails").value=p.details||"";
+document.getElementById("pActive").checked=p.is_active!==false;
+document.getElementById("imagePreview").innerHTML=p.image_url?`<img src="${esc(p.image_url)}" style="max-width:150px;max-height:150px"><br><button type="button" class="danger" onclick="deleteProductImage('${p.id}')">Delete Image</button>`:"";
+window.editingProduct=p;
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function clearProductForm(){
+document.getElementById("pId").value="";
+document.getElementById("pName").value="";
+document.getElementById("pBrand").value="";
+document.getElementById("pComposition").value="";
+document.getElementById("pCategory").value="";
+document.getElementById("pPack").value="";
+document.getElementById("pMrp").value="";
+document.getElementById("pPrice").value="";
+document.getElementById("pStock").value="";
+document.getElementById("pDetails").value="";
+document.getElementById("pActive").checked=true;
+document.getElementById("pImage").value="";
+document.getElementById("imagePreview").innerHTML="";
+window.editingProduct=null;
+}
+
+function previewImage(e){
+let file=e.target.files[0];
+if(!file)return;
+let url=URL.createObjectURL(file);
+document.getElementById("imagePreview").innerHTML=`<img src="${url}" style="max-width:150px;max-height:150px">`;
+}
+
+async function uploadImage(file,productId){
+let ext=file.name.split(".").pop().toLowerCase();
+let path="products/"+productId+"-"+Date.now()+"."+ext;
+
+let {error}=await sb.storage.from("product-images").upload(path,file,{upsert:false});
+if(error)throw error;
+
+let {data}=sb.storage.from("product-images").getPublicUrl(path);
+return {url:data.publicUrl,path};
+}
+
+async function saveProduct(e){
+e.preventDefault();
+let msg=document.getElementById("productSaveMsg");
+msg.innerHTML="<div class='notice'>Saving...</div>";
+
+try{
+let id=document.getElementById("pId").value||crypto.randomUUID();
+let old=window.editingProduct||null;
+let imageUrl=old?.image_url||null;
+let imagePath=old?.image_path||null;
+
+let file=document.getElementById("pImage").files[0];
+if(file){
+let uploaded=await uploadImage(file,id);
+imageUrl=uploaded.url;
+imagePath=uploaded.path;
+
+if(old?.image_path){
+await sb.storage.from("product-images").remove([old.image_path]);
+}
+}
+
+let payload={
+id:id,
+name:document.getElementById("pName").value.trim(),
+brand:document.getElementById("pBrand").value.trim(),
+composition:document.getElementById("pComposition").value.trim(),
+category:document.getElementById("pCategory").value.trim(),
+pack_size:document.getElementById("pPack").value.trim(),
+mrp:Number(document.getElementById("pMrp").value||0),
+selling_price:Number(document.getElementById("pPrice").value||0),
+stock:Number(document.getElementById("pStock").value||0),
+details:document.getElementById("pDetails").value.trim(),
+image_url:imageUrl,
+image_path:imagePath,
+is_active:document.getElementById("pActive").checked,
+updated_at:new Date().toISOString()
 };
 
-$("pImageFile").onchange=()=>{
- const file=$("pImageFile").files[0];
- if(!file){$("imagePreview").innerHTML="";return;}
- if(!file.type.startsWith("image/")||file.size>5*1024*1024){
-  alert("Choose an image under 5 MB.");$("pImageFile").value="";return;
- }
- $("imagePreview").innerHTML=`<img alt="Preview" src="${URL.createObjectURL(file)}" style="max-width:130px;max-height:130px">`;
-};
+let {error}=await sb.from("products").upsert(payload);
+if(error)throw error;
 
-async function uploadProductImage(){
- const file=$("pImageFile").files[0];
- if(!file)return $("pImage").value.trim()||uploadedImageUrl;
- const ext=(file.name.split(".").pop()||"jpg").replace(/[^a-zA-Z0-9]/g,"");
- const path=Date.now()+"-"+Math.random().toString(36).slice(2)+"."+ext;
- const {error}=await db.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type});
- if(error)throw error;
- const {data}=db.storage.from(BUCKET).getPublicUrl(path);
- return data.publicUrl;
+msg.innerHTML="<div class='notice success'>Product saved successfully.</div>";
+clearProductForm();
+await loadProducts();
+await loadAdminProducts();
+
+}catch(err){
+msg.innerHTML=`<div class="notice error">${esc(err.message||"Save failed")}</div>`;
+}
 }
 
-$("saveProduct").onclick=saveProduct;
+async function deleteProductImage(id){
+if(!confirm("Delete this product image?"))return;
+let {data,error}=await sb.from("products").select("image_path").eq("id",id).single();
+if(error)return alert(error.message);
 
-async function saveProduct(){
- const name=$("pName").value.trim();
- if(!name){alert("Product name is required.");return;}
- const price=Number($("pPrice").value||0);
- const mrp=Number($("pMrp").value||0);
- const stock=Number($("pStock").value||0);
- if(price<0||mrp<0||stock<0){alert("Price and stock cannot be negative.");return;}
-
- let image_url;
- try{image_url=await uploadProductImage();}
- catch(e){alert("Image upload failed: "+e.message);return;}
-
- const payload={
-  name,
-  brand:$("pBrand").value.trim(),
-  composition:$("pComposition").value.trim(),
-  category:$("pCategory").value.trim()||"Other",
-  selling_price:price,
-  mrp,
-  stock,
-  image_url,
-  details:$("pDetails").value.trim(),
-  is_active:true
- };
-
- let result;
- if(editingId)result=await db.from("products").update(payload).eq("id",editingId);
- else result=await db.from("products").insert(payload);
-
- if(result.error){alert("Save failed: "+result.error.message);return;}
- alert("Product saved.");
- editingId=null;
- clearForm();
- await loadProducts();
- await renderAdminProducts();
+if(data.image_path){
+await sb.storage.from("product-images").remove([data.image_path]);
 }
 
-async function renderAdminProducts(){
- const {data,error}=await db.from("products").select("*").order("created_at",{ascending:false});
- if(error){$("adminProducts").innerText=error.message;return;}
- if(!data?.length){$("adminProducts").innerText="No products added yet.";return;}
- $("adminProducts").innerHTML=data.map(p=>`
- <div class="adminProduct">
- <div><b>${escapeHtml(p.name)}</b><br>₹${money(p.selling_price)} | Stock: ${p.stock||0}</div>
- <div><button class="edit" data-edit="${p.id}">EDIT</button>
- <button class="delete" data-delete="${p.id}">DELETE</button></div>
- </div>`).join("");
- document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));
- document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteProduct(b.dataset.delete));
-}
+let {error:updateError}=await sb.from("products").update({
+image_url:null,
+image_path:null
+}).eq("id",id);
 
-async function editProduct(id){
- const {data,error}=await db.from("products").select("*").eq("id",id).single();
- if(error){alert(error.message);return;}
- const p=data;editingId=id;uploadedImageUrl=p.image_url||"";
- $("pName").value=p.name||"";
- $("pBrand").value=p.brand||"";
- $("pComposition").value=p.composition||"";
- $("pCategory").value=p.category||"";
- $("pPrice").value=p.selling_price??"";
- $("pMrp").value=p.mrp??"";
- $("pStock").value=p.stock??"";
- $("pImage").value=p.image_url||"";
- $("pDetails").value=p.details||"";
- $("pImageFile").value="";
- $("imagePreview").innerHTML=p.image_url?`<img src="${escapeHtml(p.image_url)}" style="max-width:130px;max-height:130px">`:"";
- alert("Edit details and press SAVE PRODUCT. Upload a new photo to replace the old one.");
+if(updateError)alert(updateError.message);
+else{
+alert("Image deleted.");
+loadAdminProducts();
+loadProducts();
+}
 }
 
 async function deleteProduct(id){
- if(!confirm("Delete this product?"))return;
- const {error}=await db.from("products").delete().eq("id",id);
- if(error){alert("Delete failed: "+error.message);return;}
- await loadProducts();await renderAdminProducts();
- alert("Product deleted.");
+if(!confirm("Delete this product completely?"))return;
+
+let {data}=await sb.from("products").select("image_path").eq("id",id).single();
+if(data?.image_path){
+await sb.storage.from("product-images").remove([data.image_path]);
 }
 
-function clearForm(){
- ["pName","pBrand","pComposition","pCategory","pPrice","pMrp","pStock","pImage","pDetails"].forEach(id=>$(id).value="");
- $("pImageFile").value="";$("imagePreview").innerHTML="";
- editingId=null;uploadedImageUrl="";
+let {error}=await sb.from("products").delete().eq("id",id);
+if(error)alert(error.message);
+else{
+await loadProducts();
+loadAdminProducts();
 }
-$("clearForm").onclick=clearForm;
+}
 
-$("placeOrder").onclick=()=>{
- if(!cart.length){alert("Cart is empty.");return;}
- const name=$("customerName").value.trim();
- const phone=$("customerPhone").value.replace(/\D/g,"").slice(-10);
- const address=$("customerAddress").value.trim();
- const landmark=$("landmark").value.trim();
- const km=parseFloat($("distance").value);
+async function loadAdminOrders(){
+let {data,error}=await sb.from("orders").select("*").order("created_at",{ascending:false});
+if(error){
+document.getElementById("adminOrders").innerHTML="<div class='notice error'>"+esc(error.message)+"</div>";
+return;
+}
 
- if(!name||!address||phone.length!==10){alert("Enter customer name, valid 10-digit mobile and full address.");return;}
- if(!Number.isFinite(km)||km<0){alert("Enter a valid distance in KM.");return;}
+if(!data?.length){
+document.getElementById("adminOrders").innerHTML="<div class='muted'>No orders yet.</div>";
+return;
+}
 
- const {subtotal,fee,total}=calculateTotal();
- const lines=cart.map(p=>"- "+p.name+" x "+p.qty+" = Rs "+Number(p.selling_price||0)*p.qty).join("\n");
- const msg=
- "INDIAN MEDICAL STORE - NEW ORDER\n\n"+
- "Customer: "+name+"\nMobile: "+phone+
- "\nAddress: "+address+"\nLandmark: "+(landmark||"Not provided")+
- "\nDistance: "+km+" KM\n\nItems:\n"+lines+
- "\n\nSubtotal: Rs "+subtotal+"\nDelivery: Rs "+fee+
- "\nTotal: Rs "+total+"\nPayment: Cash on Delivery";
- window.location.href="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg);
+let html="";
+for(const o of data){
+let {data:items}=await sb.from("order_items").select("*").eq("order_id",o.id);
+
+html+=`
+<div class="order">
+<div class="orderhead">
+<div><b>Order ID:</b> ${esc(o.id)}</div>
+<div class="status">${esc(o.status||"New")}</div>
+</div>
+<hr>
+<b>Customer:</b> ${esc(o.customer_name)}<br>
+<b>Phone:</b> ${esc(o.phone)}<br>
+<b>Address:</b> ${esc(o.address)}<br>
+<b>Landmark:</b> ${esc(o.landmark||"-")}<br>
+<b>Distance:</b> ${o.distance_km!=null?Number(o.distance_km).toFixed(2)+" KM":"-"}<br>
+<b>Delivery Fee:</b> ${money(o.delivery_fee)}<br>
+<b>Payment:</b> ${esc(o.payment_method)}<br>
+<b>Total:</b> ${money(o.total)}<br>
+${o.latitude!=null&&o.longitude!=null?`<a target="_blank" href="https://www.google.com/maps?q=${o.latitude},${o.longitude}">📍 Open Customer Location</a><br>`:""}
+<br>
+<b>Items:</b>
+<ul>${(items||[]).map(i=>`<li>${esc(i.product_name)} × ${i.quantity} = ${money(i.unit_price*i.quantity)}</li>`).join("")}</ul>
+<div class="row">
+<select id="status-${o.id}">
+${["New","Confirmed","Preparing","Out for Delivery","Delivered","Cancelled"].map(s=>`<option ${o.status===s?"selected":""}>${s}</option>`).join("")}
+</select>
+<button class="primary" onclick="updateOrderStatus('${o.id}')">Update Status</button>
+</div>
+</div>`;
+}
+document.getElementById("adminOrders").innerHTML=html;
+}
+
+async function updateOrderStatus(id){
+let status=document.getElementById("status-"+id).value;
+let {error}=await sb.from("orders").update({
+status:status,
+updated_at:new Date().toISOString()
+}).eq("id",id);
+
+if(error)alert(error.message);
+else loadAdminOrders();
+}
+
+async function loadAdminFeedback(){
+let {data,error}=await sb.from("feedback").select("*").order("created_at",{ascending:false});
+if(error){
+document.getElementById("adminFeedback").innerHTML="<div class='notice error'>"+esc(error.message)+"</div>";
+return;
+}
+
+document.getElementById("adminFeedback").innerHTML=(data||[]).map(f=>`
+<div class="order">
+<b>Feedback ID:</b> ${esc(f.id)}<br>
+<b>Order:</b> ${esc(f.order_id||"-")}<br>
+<b>Rating:</b> ${f.rating?("★".repeat(f.rating)):"-"}<br>
+<b>Review:</b> ${esc(f.review||"-")}<br>
+<b>Complaint:</b> ${esc(f.complaint||"-")}<br>
+<b>Status:</b> ${esc(f.status||"New")}<br>
+<b>Admin Reply:</b> ${esc(f.admin_reply||"-")}
+<hr>
+<textarea id="reply-${f.id}" placeholder="Write admin reply">${esc(f.admin_reply||"")}</textarea>
+<div class="row">
+<select id="fstatus-${f.id}">
+${["New","Reviewed","Resolved","Closed"].map(s=>`<option ${f.status===s?"selected":""}>${s}</option>`).join("")}
+</select>
+<button class="primary" onclick="replyFeedback('${f.id}')">Save Reply</button>
+</div>
+</div>
+`).join("")||"<div class='muted'>No feedback yet.</div>";
+}
+
+async function replyFeedback(id){
+let reply=document.getElementById("reply-"+id).value;
+let status=document.getElementById("fstatus-"+id).value;
+
+let {error}=await sb.from("feedback").update({
+admin_reply:reply,
+status:status
+}).eq("id",id);
+
+if(error)alert(error.message);
+else{
+alert("Reply saved.");
+loadAdminFeedback();
+}
+}
+
+async function loadAdminSettings(){
+let {data}=await sb.from("store_settings").select("*").eq("id",1).maybeSingle();
+if(data){
+settings={...settings,...data};
+document.getElementById("sName").value=settings.store_name||"";
+document.getElementById("sWhatsapp").value=settings.whatsapp||"";
+document.getElementById("sLat").value=settings.store_latitude??"";
+document.getElementById("sLng").value=settings.store_longitude??"";
+document.getElementById("sFree").value=settings.free_delivery_km??5;
+document.getElementById("sTier2").value=settings.tier2_delivery_km??10;
+document.getElementById("sFee2").value=settings.tier2_fee??30;
+document.getElementById("sFee3").value=settings.tier3_fee??50;
+}
+}
+
+async function saveSettings(e){
+e.preventDefault();
+
+let payload={
+store_name:document.getElementById("sName").value.trim()||"INDIAN MEDICAL STORE",
+whatsapp:document.getElementById("sWhatsapp").value.trim()||"7310807043",
+store_latitude:document.getElementById("sLat").value===""?null:Number(document.getElementById("sLat").value),
+store_longitude:document.getElementById("sLng").value===""?null:Number(document.getElementById("sLng").value),
+free_delivery_km:Number(document.getElementById("sFree").value||5),
+tier2_delivery_km:Number(document.getElementById("sTier2").value||10),
+tier2_fee:Number(document.getElementById("sFee2").value||30),
+tier3_fee:Number(document.getElementById("sFee3").value||50),
+updated_at:new Date().toISOString()
 };
 
-loadProducts();
-updateCart();
+let {error}=await sb.from("store_settings").update(payload).eq("id",1);
+if(error){
+document.getElementById("settingsMsg").innerHTML=`<div class="notice error">${esc(error.message)}</div>`;
+return;
+}
+
+settings={...settings,...payload};
+document.getElementById("storeName").textContent=settings.store_name;
+document.getElementById("settingsMsg").innerHTML="<div class='notice success'>Settings saved.</div>";
+}
+
+/* URL product detail */
+window.addEventListener("popstate",()=>{
+let id=new URLSearchParams(location.search).get("product");
+if(id){
+let p=products.find(x=>x.id===id);
+if(p)openProductWithoutHistory(id);
+}else closeModal("productModal");
+});
+
+function openProductWithoutHistory(id){
+let p=products.find(x=>x.id===id);
+if(!p)return;
+currentProduct=p;
+let img=p.image_url?`<img src="${esc(p.image_url)}">`:`<div class="noimg">💊</div>`;
+document.getElementById("productDetail").innerHTML=`
+<div class="productdetail">
+<div class="bigpic">${img}</div>
+<div>
+<div class="brand">${esc(p.brand||"Veterinary")}</div>
+<h2>${esc(p.name)}</h2>
+<p><b>Composition:</b> ${esc(p.composition||"Not specified")}</p>
+<p><b>Category:</b> ${esc(p.category||"Veterinary")}</p>
+<p><b>Pack Size:</b> ${esc(p.pack_size||"")}</p>
+<p>${esc(p.details||"Product details not added yet.")}</p>
+<h2>${money(p.selling_price)}</h2>
+<div class="row">
+<button class="add" style="padding:12px" onclick="addToCart('${p.id}')">🛒 Add to Cart</button>
+<button class="buy" style="padding:12px" onclick="buyNow('${p.id}')">⚡ Order Now</button>
+</div>
+</div>
+</div>`;
+openModal("productModal");
+}
+
+/* INITIAL */
+(async function(){
+updateCartCount();
+await loadSettings();
+await loadProducts();
+
+let productId=new URLSearchParams(location.search).get("product");
+if(productId){
+setTimeout(()=>{
+if(products.find(x=>x.id===productId))openProductWithoutHistory(productId);
+},500);
+}
+})();
 </script>
+
 </body>
 </html>
